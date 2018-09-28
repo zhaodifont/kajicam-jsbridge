@@ -37,10 +37,10 @@ export default class BridgeFactory {
 
 ```
 /**
-     * app 在app内部获取app的信息
-     * @param userCallback
-     *    : callback param 0 - ./model/AppInfo
-     */
+  * app 在app内部获取app的信息
+  * @param userCallback
+  *    : callback param 0 - ./model/AppInfo
+*/
     appInfo(userCallback) {
         // 注册一个回调函数  此回调函数是属于 AppInfo的
         const callbackMethodFullName = this._registerCallback("appInfo", userCallback, AppInfo);
@@ -60,11 +60,11 @@ export default class BridgeFactory {
 
 ```
 /**
-     * 将页面中的图片或视频 保存到用户的手机终端 并触发分享
-     * @param saveShareParam (@see ./param/SaveShareParam)
-     * @param sharePoppedCallback - app中分享面板弹出时触发 (关闭面板时可能会再次触发) callback
-     * @param shareMediaClickedCallback - app选择分享媒介时触发 callback (现阶段无效 ??)
-     */
+  * 将页面中的图片或视频 保存到用户的手机终端 并触发分享
+  * @param saveShareParam (@see ./param/SaveShareParam)
+  * @param sharePoppedCallback - app中分享面板弹出时触发 (关闭面板时可能会再次触发) callback
+  * @param shareMediaClickedCallback - app选择分享媒介时触发 callback (现阶段无效 ??)
+*/
     shareWithCallback(saveShareParam, sharePoppedCallback, shareMediaClickedCallback) {
         const sharePoppedCallbackName = this._registerCallback('sharePoppedCallback', sharePoppedCallback, AppCommonResult);
         const shareMediaClickedCallbackName = this._registerCallback('shareMediaClickedCallback', shareMediaClickedCallback, AppCommonResult);
@@ -102,10 +102,10 @@ export function handleSave(){
 ### eventCamera
 ```
 /**
-     * 调用相机或相册功能 并将拍摄或获取的照片返回给页面.
-     * @param eventCameraParam : (@see ./param/EventCameraParam)
-     * @param userCallback
-     */
+  * 调用相机或相册功能 并将拍摄或获取的照片返回给页面.
+  * @param eventCameraParam : (@see ./param/EventCameraParam)
+  * @param userCallback
+*/
     eventCamera(eventCameraParam, userCallback) {
         const callbackMethodFullName = this._registerCallback("eventCamera", userCallback,
             CameraResult, eventCameraParam.type, eventCameraParam.cameraPosition);
@@ -168,10 +168,10 @@ function eventCameraCallback(res, type){
 ### save
 ```
 /**
-     * 将页面中的图片或视频 保存到用户的手机终端
-     * @param saveShareParam (@see ./param/SaveShareParam)
-     * @param userCallback
-     */
+  * 将页面中的图片或视频 保存到用户的手机终端
+  * @param saveShareParam (@see ./param/SaveShareParam)
+  * @param userCallback
+*/
     save(saveShareParam, userCallback) {
         const callbackMethodFullName = this._registerCallback("save", userCallback, AppCommonResult);
         this._calliOSFunction("save", saveShareParam, callbackMethodFullName);
@@ -200,6 +200,42 @@ function eventCameraCallback(res, type){
     
  ```
 
+###  _calliOSFunction & _openCustomURLinIFrame
+
+```
+/**
+  * ios 与app联动的原理
+  * (app scheme 决定使用的是beta 还是 real app)
+  *
+  * @param functionName - 与app约定的function name
+  * @param args - 传送参数对象 argument object
+  * @param sCallback - 在app中传出回调
+  * @private
+*/
+    _calliOSFunction(functionName, args, sCallback) {
+        let url = ConfigFactory.scheme + "native/";
+        const callInfo = {};
+        callInfo.functionName = functionName;
+        if (sCallback) {
+            callInfo.success = sCallback;
+        }
+        if (args) {
+            callInfo.args = args;
+        }
+        url += JSON.stringify(callInfo);
+
+        this._openCustomURLinIFrame(url);
+    }
+
+    _openCustomURLinIFrame(src) {
+        const rootElm = document.documentElement;
+        const newFrameElm = document.createElement("IFRAME");
+
+        newFrameElm.setAttribute("src", src);
+        rootElm.appendChild(newFrameElm);
+        newFrameElm.parentNode.removeChild(newFrameElm);
+    }
+ ```
 
 
 
