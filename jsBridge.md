@@ -29,8 +29,9 @@ export default class BridgeFactory {
 }
 ```
 
-判断 ios: 引入iosBridge；  android: 引入AndroidBridge； 其他系统: 引入NullBridge (不触发咔叽的功能 只会给一个log提示)
-
+判断为ios: 引入iosBridge；  android: 引入AndroidBridge；
+[]()
+其他系统: 引入NullBridge (不触发咔叽的功能 只会给一个log提示)
 
 ### appInfo
 
