@@ -41,11 +41,16 @@ export default class BridgeFactory {
      *    : callback param 0 - ./model/AppInfo
      */
     appInfo(userCallback) {
+        // 注册一个回调函数  此回调函数是属于 AppInfo的
         const callbackMethodFullName = this._registerCallback("appInfo", userCallback, AppInfo);
+        
+        // 通过与app约定好的功能名称唤起此功能  
         this._calliOSFunction("appInfo", null, callbackMethodFullName);
+         // this.calliOSFunction("appInfo", null, "B612Kaji.Native.ios.Function.getInstance().callback.appInfo")
+        
     }
     
-    //成功示例
+    //成功示例  注意 返回的信息属于异步请求返回的数据 如果同步的代码中需要使用此信息会失败、异常
     {app: '7.3.1', 'os': '23', 'deviceModel': 'CAM-TL00', 'language': 'zh-CN', 'country': 'CN'}
 ```
 
@@ -70,17 +75,20 @@ export default class BridgeFactory {
     }
  ```
  
-> save的进化版  不近能保存 还分享
+> save的进化版  不仅能保存 还分享
 >
 > 分享面板弹出一次的过程中 弹出和关闭都会触发此函数 正确统计这一次的分享
 > 
-> 一般使用此功能时 代码可能是这样:
+> For example:
+
 ```
+import SaveShareParam from "@/common/bridge/param/SaveShareParam";
+
 export function handleSave(){
   const param = new SaveShareParam($('#distImg')[0].src, SaveShareParam.types.image);
-  var iosState = false; //  设置一个变量
+  let stat = false; //  初始一个变量 这次未统计
   bridgeFactory.getBridge().shareWithCallback(param, result => {
-    if(!iosState){ //  这样只统计一次
+    if(!stat){ //  这样只统计一次
       showToast('保存成功')
       iosState = !iosState
       _hmt.push(['_trackEvent', eventCategory+ inState, 'Btn', '保存分享' + _years[yearAct].imgTial[_styleAct]])
@@ -90,7 +98,57 @@ export function handleSave(){
 }
 ```
 
+### eventCamera
+```
+/**
+     * 调用相机或相册功能 并将拍摄或获取的照片返回给页面.
+     * @param eventCameraParam : (@see ./param/EventCameraParam)
+     * @param userCallback
+     */
+    eventCamera(eventCameraParam, userCallback) {
+        const callbackMethodFullName = this._registerCallback("eventCamera", userCallback,
+            CameraResult, eventCameraParam.type, eventCameraParam.cameraPosition);
 
+        this._calliOSFunction("eventCamera", eventCameraParam, callbackMethodFullName);
+    }
+
+    eventCameraWithLandmarks(eventCameraParam, userCallback) {
+        const callbackMethodFullName = this._registerCallback("eventCameraWithLandmarks", userCallback,
+            CameraResult, eventCameraParam.type, eventCameraParam.cameraPosition);
+
+        this._calliOSFunction("eventCameraWithLandmarks", eventCameraParam, callbackMethodFullName);
+    }
+```
+
+> eventCameraParam **这个参数引用自**: ( ./param/EventCameraParam)
+>
+
+```
+import EventCameraParam from "@/common/bridge/param/EventCameraParam";
+
+const param = new EventCameraParam(
+            EventCameraParam.types.imageCamera, // 字符串 imageCamera: 相机  imageAlbum： 相册
+            EventCameraParam.cameraPositions.front, // 前置摄像头 0  后置摄像头: 1
+            comConfig.filterId, // 贴纸id
+            comConfig.categoryId, // 分栏id (贴纸是在分栏里面的 所以app一般找贴纸先找到贴纸所在的分栏)
+            comConfig.stickerId, // 贴纸id
+            '', // 貌似是 音乐id
+            'true' // 是否自动下载此贴纸  鸡肋 以后改为默认自动下载 (如咔叽里此贴纸未下载 则无法选中使用)
+    );
+
+const galleryParams = new EventCameraParam(EventCameraParam.types.imageAlbum);
+
+$('#cameraBtn, #galleryBtn').off('click') // 每次添加事件 先解除 否则多次添加事件会调用失败、异常
+$('#cameraBtn').on('click', function(){
+  bridgeFactory.getBridge().eventCamera(param, eventCameraCallback)
+   _hmt.push(['_trackEvent', eventCategory+ inState, 'Btn', '相机拍照'])
+})
+$('#galleryBtn').on('click', function(){
+  bridgeFactory.getBridge().eventCamera(galleryParams, eventCameraCallback)
+   _hmt.push(['_trackEvent', eventCategory+ inState, 'Btn', '相册选取'])
+})
+      
+```
 ### save
 ```
 /**
@@ -105,7 +163,6 @@ export function handleSave(){
  ```
  
 > 使用频率较低  注意和 shareWidthCallback的区别
-
 
 
 
