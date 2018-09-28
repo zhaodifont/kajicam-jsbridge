@@ -70,7 +70,10 @@ export default class BridgeFactory {
     }
  ```
  
+> save的进化版  不近能保存 还分享
+>
 > 分享面板弹出一次的过程中 弹出和关闭都会触发此函数 正确统计这一次的分享
+> 
 > 一般使用此功能时 代码可能是这样:
 ```
 export function handleSave(){
