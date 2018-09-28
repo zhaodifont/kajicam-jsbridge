@@ -2,7 +2,8 @@
 
 [返回首页](./index.md)
  
- 
+- [html](#appInfo)
+
 * 对于 jsBridge
 * 在android beta app和real app可以用同一份jsbridge 没有区别
 * 在ios中(_calliOSFunction 函数) : 
@@ -77,7 +78,7 @@ export default class BridgeFactory {
  
 > save的进化版  不仅能保存 还分享
 >
-> 分享面板弹出一次的过程中 弹出和关闭都会触发此函数 正确统计这一次的分享
+> 分享面板弹出一次的过程中 弹出和关闭都会触发此函数的回调函数
 > 
 > For example:
 
@@ -149,6 +150,21 @@ $('#galleryBtn').on('click', function(){
 })
       
 ```
+> eventCameraWithLandmarks 为更高级的接口 不仅能返回拍摄、选取的照片  
+>
+> 如果拍摄、选取的是人物脸部 能够获取此照片的脸部坐标 一起返回给页面
+```
+
+function eventCameraCallback(res, type){
+ if (!!res.success == true) {
+   const imgSrc = res.base64Image
+   const landmark = res.landmarks // 如果有坐标 一起传给人脸融合接口 效果更佳
+   const type = type // 此次调用的是 相机还是相册
+ }
+}
+
+```
+
 ### save
 ```
 /**
@@ -164,7 +180,25 @@ $('#galleryBtn').on('click', function(){
  
 > 使用频率较低  注意和 shareWidthCallback的区别
 
+###  getCameraImage
 
+```
+/**
+     * 场景: 用户先在app中使用某贴纸拍照 拍照完出现一个confirmbanner 点击banner 进入H5页面.
+     * 那么进入h5页面后 能够获取到拍摄的照片
+     * @param userCallback
+     */
+    getCameraImage(userCallback) {
+        const callbackMethodFullName = this._registerCallback("getCameraImage", userCallback, CameraResult);
+        this._calliOSFunction("getCameraImage", null, callbackMethodFullName);
+    }
+
+    getCameraImageWithLandmarks(userCallback) {
+        const callbackMethodFullName = this._registerCallback("getCameraImageWithLandmarks", userCallback, CameraResult);
+        this._calliOSFunction("getCameraImageWithLandmarks", null, callbackMethodFullName);
+    }
+    
+ ```
 
 
 
