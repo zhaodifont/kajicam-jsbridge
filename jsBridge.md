@@ -153,8 +153,9 @@ $('#galleryBtn').on('click', function(){
 > eventCameraWithLandmarks 为更高级的接口 不仅能返回拍摄、选取的照片  
 >
 > 如果拍摄、选取的是人物脸部 能够获取此照片的脸部坐标 一起返回给页面
-```
+>
 
+```
 function eventCameraCallback(res, type){
  if (!!res.success == true) {
    const imgSrc = res.base64Image
