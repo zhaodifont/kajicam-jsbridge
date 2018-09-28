@@ -1,12 +1,6 @@
-
-
--
-
--
-
 ### jsBridge 文档
 
---
+---
  
 * 对于 jsBridge
 * 在android beta app和real app可以用同一份jsbridge 没有区别
