@@ -12,7 +12,25 @@
 
 ### jsBridge的引入
 
+```
+// bridge/BridgeFactory.js
+export default class BridgeFactory {
+    static getBridge() {
+        if (BrowserChecker.isIos()) {
+            return new IosBridge();
+
+        } else if (BrowserChecker.isAndroid()) {
+            return new AndroidBridge();
+
+        } else {
+            return new NullBridge();
+        }
+    }
+}
+```
+
 判断如果ios 引入iosBridge；  android 引入AndroidBridge； 其他系统 引入NullBridge (不触发咔叽的功能 只会给一个log提示)
+
 
 
 
