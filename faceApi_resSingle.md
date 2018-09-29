@@ -17,10 +17,10 @@ America,Caribbean,China2,Egypt,France,Japan,home,UK2...
 
 ###
 ### 图片上传接口 file upload Api
-http://qa-b612-fs.snowcam.cn/v1/event/vision/**travel**/upload-only
+http://qa-b612-fs.snowcam.cn/v1/event/vision/ **travel** /upload-only
 
 ### 人脸融合接口 image process Api
-http://qa-b612-fs.snowcam.cn/v1/event/vision/**travel**
+http://qa-b612-fs.snowcam.cn/v1/event/vision/ **travel**
 
 ### params:
 
