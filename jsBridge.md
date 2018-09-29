@@ -125,6 +125,7 @@ export function handleSave(){
     eventCamera(eventCameraParam, userCallback) {
         // android 中注意 当前版本中 需要把categoryId、stickerId强制设置为undefined 不然调用时会出现卡死闪退的情况
         // 只使用 filterId即可
+        // eventCameraWithLandmarks同理
         if(BrowserChecker.isAndroid()) {
             // eventCameraParam.filterId = undefined;
             eventCameraParam.categoryId = undefined;
