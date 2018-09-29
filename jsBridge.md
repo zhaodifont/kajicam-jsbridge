@@ -106,6 +106,7 @@ export function handleSave(){
   * @param eventCameraParam : (@see ./param/EventCameraParam)
   * @param userCallback
 */
+   // ios
     eventCamera(eventCameraParam, userCallback) {
         const callbackMethodFullName = this._registerCallback("eventCamera", userCallback,
             CameraResult, eventCameraParam.type, eventCameraParam.cameraPosition);
@@ -119,7 +120,27 @@ export function handleSave(){
 
         this._calliOSFunction("eventCameraWithLandmarks", eventCameraParam, callbackMethodFullName);
     }
+    
+    // android
+    eventCamera(eventCameraParam, userCallback) {
+        // android 中注意 当前版本中 需要把categoryId、stickerId强制设置为undefined 不然调用时会出现卡死闪退的情况
+        // 只使用 filterId即可
+        if(BrowserChecker.isAndroid()) {
+            // eventCameraParam.filterId = undefined;
+            eventCameraParam.categoryId = undefined;
+            eventCameraParam.stickerId = undefined;
+        }
+
+        const callbackMethodFullName = this._registerCallback(
+            "eventCamera", userCallback, EventCameraResult, eventCameraParam.type, eventCameraParam.cameraPosition);
+
+        native.eventCamera(callbackMethodFullName, eventCameraParam.toString(true));
+    }
+    
 ```
+
+
+
 
 > eventCameraParam **这个参数引用自**: ( ./param/EventCameraParam)
 >
