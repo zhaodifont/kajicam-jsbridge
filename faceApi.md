@@ -54,7 +54,7 @@
 >
 > path = succesResPath; 
 >
-> postfix = _06; (融合效果 一次生成成功n个风格的图片 一次只需要指定的一个风格)
+> postfix = _11; (融合效果 一次生成成功n个风格的图片 一次只需要指定的一个风格)
 >
 > additionalParam = encodeURIComponent(content=postfix)
 
