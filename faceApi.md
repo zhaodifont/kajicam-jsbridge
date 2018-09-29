@@ -75,5 +75,24 @@
       }
   }
 ```
+> 虽然这里操作了一次图片融合 并有成功响应 但融合的图片地址是没有的 需要下一步来拼接
+>
+> succesResPath 下一步还有用
+
+### Image URL produced (融合成功返回的图片地址是怎么获得的)
+
+#### Image access domain (图片访问的主域名)
+* BETA : https://qa-b612.snowcam.cn/owfs/
+* REAL : https://b612kaji-org.oss-cn-beijing.aliyuncs.com/
+* 完整的可访问的融合成功图片应该是这样的: domain + succesResPath + postfix.jpg
+
+##### example: (融合成功的图片怎么拼接的)
+```
+  // succesResPath = event/vision/cyl/20180614/16/e821543634e7452498669de0f73dff31/163fd1d90f8
+  // postfix = _11 
+  // 在测试环境 图片domain url：https://qa-b612.snowcam.cn/owfs/
+  
+  https://qa-b612.snowcam.cn/owfs/event/vision/cyl/20180614/16/e821543634e7452498669de0f73dff31/163fd1d90f8_11.jpg
+```
 
 [返回首页](./index.md)
