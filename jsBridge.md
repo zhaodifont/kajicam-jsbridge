@@ -99,7 +99,7 @@ export function handleSave(){
 }
 ```
 
-### eventCamera
+### eventCamera & eventCameraWithLandmarks
 ```
 /**
   * 调用相机或相册功能 并将拍摄或获取的照片返回给页面.
