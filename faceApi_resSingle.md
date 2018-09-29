@@ -26,10 +26,10 @@ http://qa-b612-fs.snowcam.cn/v1/event/vision/ **travel**
 
 > path = uploadSuccessPath
 >
-> postfix = _travel_UK01
+> postfix = _**travel**_UK01
 >
-> additionalParam = encodeURIComponent('content=' + 'travel_UK01')
+> additionalParam = encodeURIComponent('content=' + '**travel**_UK01')
 
 ### image url produced
 
-imagePrefix + uploadSuccessPath + _travel_UK01.jpg
+imagePrefix + uploadSuccessPath + _**travel**_UK01.jpg
