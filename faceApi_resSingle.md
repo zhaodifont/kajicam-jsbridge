@@ -1,7 +1,9 @@
 ## 人脸融合约定规范之返回单个图片
 
 ### For example
+
 activetyName & contentName: '**travel**'
+
 produce one image one time !
 
 ###
