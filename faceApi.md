@@ -44,7 +44,7 @@
 >
 
 ### Image processing API (图片处理融合接口)
->
+[]()
 接口地址：
 ---
 * BETA : http://qa-b612-fs.snowcam.cn/v1/event/vision/cyl
