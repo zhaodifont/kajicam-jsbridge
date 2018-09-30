@@ -161,6 +161,8 @@ export function handleSave(){
 
 > eventCameraParam **这个参数引用自**: ( ./param/EventCameraParam)
 >
+> For example
+> 
 
 ```
 import EventCameraParam from "@/common/bridge/param/EventCameraParam";
@@ -192,6 +194,8 @@ $('#galleryBtn').on('click', function(){
 >
 > 如果拍摄、选取的是人物脸部 能够获取此照片的脸部坐标 一起返回给页面
 >
+> For example
+> 
 
 ```
 function eventCameraCallback(res, type){
@@ -201,6 +205,8 @@ function eventCameraCallback(res, type){
    const type = type // 此次调用的是 相机还是相册
  }
 }
+
+// duiba： 在android手机里面 eventCameraWithLandmarks 非人脸拍照 没有回调
 
 ```
 
