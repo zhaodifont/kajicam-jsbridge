@@ -51,10 +51,26 @@ export default class BridgeFactory {
         
     }
     
-    //成功示例  注意 返回的信息属于异步请求返回的数据 如果同步的代码中需要使用此信息会失败、异常
-    {app: '7.3.1', 'os': '23', 'deviceModel': 'CAM-TL00', 'language': 'zh-CN', 'country': 'CN'}
 ```
+> 判断 h5页面属于app内/外 
+>
+> 1 可以用appInfo方法的回调来判断
+>
+> 2 userAgent来判断
+> 
+> For example (appInfo)
+> 
 
+```
+let isInApp = false
+bridgeFactory.getBridge().appInfo(res => {
+      // res : {app: '7.3.1', 'os': '23', 'deviceModel': 'CAM-TL00', 'language': 'zh-CN', 'country': 'CN'}
+      if (res.app) {
+        isInApp = true
+      }
+    })
+  // 注意 返回的信息属于异步请求返回的数据 如果同步的代码中需要使用此信息会失误
+```
 
 ### shareWithCallback
 
