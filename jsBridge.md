@@ -299,13 +299,13 @@ function eventCameraCallback(res, type){
 > 在web打开以下链接，点击BETA按钮，即可进行测试 http://qa.b612kaji.com/app-static/kaji/login-test/link.html
 
 1. InAppBrowser 启动时发送cookie  
-*
-* 一般pc端打开 获取到曾经缓存过的document.cookie 为 Hm_lvt_c78ba600..... ; Hm_lpvt_c78ba60....; 或空
-*
-* 在app内置浏览器打开时 默认都有一个cookie （此cookie 是第一种sessionKey ？） 为 B6_SES=oOIUgm.....
-*
-* 第一种sessionKey与用户登录貌似没什么关系 （目前来说）
-*
+>
+> 一般pc端打开 获取到曾经缓存过的document.cookie 为 Hm_lvt_c78ba600..... ; Hm_lpvt_c78ba60....; 或空
+>
+> 在app内置浏览器打开时 默认都有一个cookie （此cookie 是第一种sessionKey ？） 为 B6_SES=oOIUgm.....
+>
+> 第一种sessionKey与用户登录貌似没什么关系 （目前来说）
+>
 ```
 bridge.login(userInfo => {
   console.log(userInfo.B6_SES);  // 这是第二种sessionKey
