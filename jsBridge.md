@@ -299,21 +299,41 @@ function eventCameraCallback(res, type){
 > 在web打开以下链接，点击BETA按钮，即可进行测试 http://qa.b612kaji.com/app-static/kaji/login-test/link.html
 
 1. InAppBrowser 启动时发送cookie  
->
-> 一般pc端打开 获取到曾经缓存过的document.cookie 为 Hm_lvt_c78ba600..... ; Hm_lpvt_c78ba60....; 或空
->
-> 在app内置浏览器打开时 默认都有一个cookie （此cookie 是第一种用户唯一标识 ？） 为 B6_SES=oOIUgm.....
->
-> 第一种用户唯一标识与用户登录貌似没什么关系 （目前来说）
->
+*
+* 一般pc端打开 获取到曾经缓存过的document.cookie 为 Hm_lvt_c78ba600..... ; Hm_lpvt_c78ba60....; 或空
+*
+* 在app内置浏览器打开时 默认都有一个cookie （此cookie 是第一种sessionKey ？） 为 B6_SES=oOIUgm.....
+*
+* 第一种sessionKey与用户登录貌似没什么关系 （目前来说）
+*
 ```
 bridge.login(userInfo => {
-  console.log(userInfo.B6_SES);  // 这是第二种用户唯一标识
+  console.log(userInfo.B6_SES);  // 这是第二种sessionKey
 })
 ```
 2. Click按钮 -> 调起 jsBridge.login() function
-3. 登录成功后，输出通过callback 发送的session key  (userInfo.B6_SES)
+3. 登录成功后，输出通过callback 发送的session key  (userInfo.B6_SES 第二种sessionKey)
 4. session key -> API SERVER -> user 信息查询 (通过userInfo.B6_SES 发送ajax请求获取用户信息)
+
+```
+var sessionKey = document.cookie.split("=")[1]; 
+//var sessionKey = "N9CtB4ZZOfEjGCk9i4le0oO4StKZrGBgW2l+lQQIjBboQmKQmWlYN3BRtLXfrpOCxFC7wQtYXHdIIYOw6+Itwyh25rv2reM93aXWEMGaEdI=";
+console.log(sessionKey);
+var url = "http://qa-api.b612kaji.com/v2/user/me";
+// var url = "http://api.b612kaji.com/v2/user/me"; // real
+$.ajax({
+  url : url,
+  dataType: "text",
+  headers: {
+    'Authorization': 'Bearer ' + sessionKey // 这里用的是第一种sessionKey
+  },
+  success : function(response) {
+    console.log(response);
+    document.write(response);
+  }
+});
+
+```
 
 
 
