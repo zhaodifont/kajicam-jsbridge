@@ -282,7 +282,38 @@ function eventCameraCallback(res, type){
     }
  ```
 
+###  login
 
+```
+    import UserInfo from "./model/UserInfo";
+    login(userCallback) {
+        const callbackMethodFullName = this._registerCallback("login", userCallback, UserInfo);
+        this._calliOSFunction("login", null, callbackMethodFullName);
+    }
+    
+```
+> 仅app版本7.7.5以上支持
+>
+> beta版 测试方法
+>
+> 在web打开以下链接，点击BETA按钮，即可进行测试 http://qa.b612kaji.com/app-static/kaji/login-test/link.html
+
+1. InAppBrowser 启动时发送cookie  
+>
+> 一般pc端打开 获取到曾经缓存过的document.cookie 为 Hm_lvt_c78ba600..... ; Hm_lpvt_c78ba60....; 或空
+>
+> 在app内置浏览器打开时 默认都有一个cookie （此cookie 是第一种用户唯一标识 ？） 为 B6_SES=oOIUgm.....
+>
+> 第一种用户唯一标识与用户登录貌似没什么关系 （目前来说）
+>
+```
+bridge.login(userInfo => {
+  console.log(userInfo.B6_SES);  // 这是第二种用户唯一标识
+})
+```
+2. Click按钮 -> 调起 jsBridge.login() function
+3. 登录成功后，输出通过callback 发送的session key  (userInfo.B6_SES)
+4. session key -> API SERVER -> user 信息查询 (通过userInfo.B6_SES 发送ajax请求获取用户信息)
 
 
 
