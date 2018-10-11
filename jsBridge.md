@@ -300,6 +300,8 @@ function eventCameraCallback(res, type){
 
 1. InAppBrowser 启动时发送cookie  
 >
+>如果页面包含以下的地址，在kaji 内嵌游览器被打开，能受到认证token cookie. ".snowcam.cn", ".b612kaji.com", ".yiruikecorp.com"
+>
 > 一般pc端打开 获取到曾经缓存过的document.cookie 为 Hm_lvt_c78ba600..... ; Hm_lpvt_c78ba60....; 或空
 >
 > 在app内置浏览器打开时 默认都有一个cookie （此cookie 是第一种sessionKey ？） 为 B6_SES=oOIUgm.....
