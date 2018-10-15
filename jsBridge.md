@@ -170,7 +170,7 @@ import EventCameraParam from "@/common/bridge/param/EventCameraParam";
 const param = new EventCameraParam(
             EventCameraParam.types.imageCamera, // 字符串 imageCamera: 相机  imageAlbum： 相册
             EventCameraParam.cameraPositions.front, // 前置摄像头 0  后置摄像头: 1
-            comConfig.filterId, // 贴纸id
+            comConfig.filterId, // 滤镜id
             comConfig.categoryId, // 分栏id (贴纸是在分栏里面的 所以app一般找贴纸先找到贴纸所在的分栏)
             comConfig.stickerId, // 贴纸id
             '', // 貌似是 音乐id
