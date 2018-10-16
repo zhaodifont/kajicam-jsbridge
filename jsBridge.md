@@ -6,7 +6,18 @@
 ### jsBridge的引入
 
 ```
-// bridge/BridgeFactory.js
+
+...
+// main.js
+
+import BridgeFactory from '@/js/bridge/BridgeFactory'
+
+BridgeFactory.getBridge().appInfo....
+
+
+=====================================
+
+// @/js/bridge/BridgeFactory.js
 ...
 import AndroidBridge from "./AndroidBridge";
 import IosBridge from "./IosBridge";
@@ -25,6 +36,9 @@ export default class BridgeFactory {
         }
     }
 }
+
+
+
 ```
 
 判断为ios: 引入iosBridge；  android: 引入AndroidBridge；
@@ -44,6 +58,8 @@ export default class BridgeFactory {
     ...
  }
 ...
+
+  //  如果betaApp设置此处scheme错误  出现的场景是 在betaApp跳至realApp 或反之
 ```
 
 ### appInfo
