@@ -3,12 +3,20 @@
 [返回首页](./index.md)
 []()
 
-* 对于 jsBridge
-* 在android beta app和real app可以用同一份jsbridge 没有区别
-* 在ios中(_calliOSFunction 函数) : 
-  - beta app调用jsbridge 设置scheme为 **b612cnb://native/** 
-  - real app调用jsbridge 设置scheme为 **b612cn://native/**
+* 对于 jsBridge 代码
+* 在android的beta app和real app的jsbridge代码是一样的 没有区别
+* 在ios中 只有一处区别 (iosBridge.js: _calliOSFunction 函数中) : 
+  - beta app 设置此处scheme为 **b612cnb://native/** 
+  - real app 设置此处scheme为 **b612cn://native/**
   
+```
+...
+ _calliOSFunction(functionName, args, sCallback) {
+    let url = scheme + "native/"; // 设置此处scheme为
+    ...
+ }
+...
+```
 
 ### jsBridge的引入
 
