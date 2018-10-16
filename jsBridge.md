@@ -3,25 +3,15 @@
 [返回首页](./index.md)
 []()
 
-* 对于 jsBridge 代码
-* 在android的beta app和real app的jsbridge代码是一样的 没有区别
-* 在ios中 只有一处区别 (iosBridge.js: _calliOSFunction 函数中) : 
-  - beta app 设置此处scheme为 **b612cnb://native/** 
-  - real app 设置此处scheme为 **b612cn://native/**
-  
-```
-...
- _calliOSFunction(functionName, args, sCallback) {
-    let url = scheme + "native/"; // 设置此处scheme为
-    ...
- }
-...
-```
-
 ### jsBridge的引入
 
 ```
 // bridge/BridgeFactory.js
+...
+import AndroidBridge from "./AndroidBridge";
+import IosBridge from "./IosBridge";
+...
+
 export default class BridgeFactory {
     static getBridge() {
         if (BrowserChecker.isIos()) {
@@ -40,6 +30,21 @@ export default class BridgeFactory {
 判断为ios: 引入iosBridge；  android: 引入AndroidBridge；
 []()
 其他系统: 引入NullBridge (不触发咔叽的功能 只会给一个log提示)
+
+* 对于 jsBridge 代码
+* 在android的beta app和real app的jsbridge（AndroidBridge.js）代码是一样的 没有区别
+* 在ios中 只有一处区别 (IosBridge.js: _calliOSFunction 函数中) : 
+  
+```
+...
+ _calliOSFunction(functionName, args, sCallback) {
+    let url = scheme + "native/"; 
+    // - beta app 设置此处scheme为 **b612cnb://native/** 
+    // - real app 设置此处scheme为 **b612cn://native/**
+    ...
+ }
+...
+```
 
 ### appInfo
 
