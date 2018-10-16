@@ -54,10 +54,8 @@ export default class BridgeFactory {
 ```
 > 判断 h5页面属于app内/外 
 >
-> 1 可以用appInfo方法的回调来判断
+> 用appInfo方法的回调来判断
 >
-> 2 userAgent来判断
-> 
 > For example (appInfo)
 > 
 
@@ -69,7 +67,7 @@ bridgeFactory.getBridge().appInfo(res => {
         isInApp = true
       }
     })
-  // 注意 返回的信息属于异步请求返回的数据 如果同步的代码中需要使用此信息会失误
+  // 注 返回的res信息属于异步返回的数据 如果同步的代码中需要使用此信息会失误
 ```
 
 ### shareWithCallback
