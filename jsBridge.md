@@ -38,7 +38,6 @@ export default class BridgeFactory {
 }
 
 
-
 ```
 
 判断为ios: 引入iosBridge；  android: 引入AndroidBridge；
@@ -46,20 +45,23 @@ export default class BridgeFactory {
 其他系统: 引入NullBridge (不触发咔叽的功能 只会给一个log提示)
 
 * 对于 jsBridge 代码
-* 在android的beta app和real app的jsbridge（AndroidBridge.js）代码是一样的 没有区别
-* 在ios中 只有一处区别 (IosBridge.js: _calliOSFunction 函数中) : 
+* android中 betaApp和realApp引用的jsbridge（AndroidBridge.js）代码是一模一样的 没有区别
+* 在ios中 betaApp和realApp引用的jsbridge有且只有一处区别 (IosBridge.js中 -> _calliOSFunction 函数中) : 
   
 ```
 ...
+// IosBridge.js
+
  _calliOSFunction(functionName, args, sCallback) {
     let url = scheme + "native/"; 
-    // - beta app 设置此处scheme为 **b612cnb://native/** 
-    // - real app 设置此处scheme为 **b612cn://native/**
+    // - ios betaApp 设置此处scheme为 **b612cnb://native/** 
+    // - ios realApp 设置此处scheme为 **b612cn://native/**
     ...
  }
 ...
 
-  //  如果betaApp设置此处scheme错误  出现的场景是 在betaApp跳至realApp 或反之
+  // 如果scheme设置错误 出现的场景是 在betaApp跳至realApp 或反之
+  // 当然 这个场景只会只会出现在ios中
 ```
 
 ### appInfo
