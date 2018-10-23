@@ -3,6 +3,8 @@
 [返回首页](./index.md)
 []()
 
+[Demo地址](https://zhaodifont.github.io/kajicam/index.html)
+
 ### jsBridge的引入
 
 ```
@@ -158,7 +160,9 @@ export function handleSave(){
 
         this._calliOSFunction("eventCamera", eventCameraParam, callbackMethodFullName);
     }
-
+  
+    // eventCameraWithLandmarks 仅兼容app7.6.0以上
+    // 在android中 如果拍照非人脸 则无法触发回调函数 慎用！！
     eventCameraWithLandmarks(eventCameraParam, userCallback) {
         const callbackMethodFullName = this._registerCallback("eventCameraWithLandmarks", userCallback,
             CameraResult, eventCameraParam.type, eventCameraParam.cameraPosition);
