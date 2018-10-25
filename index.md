@@ -1,4 +1,4 @@
-# kajicam 文档整理
+# kajicam 文档
 
 ### [jsBridge文档](./jsBridge.md)
  
