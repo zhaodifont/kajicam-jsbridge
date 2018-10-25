@@ -29,6 +29,7 @@
 5. 上传的二维码 尺寸必须是 260 x 260
 
 > 韩方提供接口 ：
+>
 > uploadUrl: "图片上传接口",
 >
 > imgProcess:'图片融合接口',
@@ -38,6 +39,22 @@
 > imageTail:'America2,America….',
 
 ###
+
+> 产品提供以下参数：
+> 
+> pageTitle:'页面标题'
+> 
+> filterId: "滤镜id",
+> 
+> categoryId: "分栏id",
+> 
+> stickerId: "贴纸id",
+> 
+> downlink: '下载地址',
+> 
+> qrCode: 二维码图片 站内
+> 
+> qrCodeOut:二维码图片 站外
 
 
 #### 站内/外二维码生成流程
