@@ -1,7 +1,11 @@
 # kajicam 文档整理
 
 ### [jsBridge文档](./jsBridge.md)
-  
-### [人脸融合接口文档](./faceApi.md)
+ 
+## 人脸融合
 
-### [人脸融合约定规范之返回单个图片](./faceApi_resSingle.md)
+### [Api&生成流程规范](./faceApi.md)
+
+### [生成单图片接口约定规范](./faceApi_resSingle.md)
+
+### [后台操作流程规范](./faceApi_adminSys.md)
