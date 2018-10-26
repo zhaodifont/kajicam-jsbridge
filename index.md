@@ -9,3 +9,5 @@
 ### [生成单图片接口约定规范](./faceApi_resSingle.md)
 
 ### [后台操作流程规范](./faceApi_adminSys.md)
+
+### [h5活动配置参数日志](./faceApi_adminSys.md)
