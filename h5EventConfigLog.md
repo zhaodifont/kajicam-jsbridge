@@ -17,6 +17,7 @@
 * imagePrefix：https://b612.snowcam.cn/owfs/
 * postfix：bad,bride,demon,gothic,maid,nurse,sick,witch
 * f:235  c: 20005  s:301197
+* easeyLink & downLink: https://lnk0.com/easylink/ELpMh4Y5
 
 
 ### 2018.10 十一活动 travel
