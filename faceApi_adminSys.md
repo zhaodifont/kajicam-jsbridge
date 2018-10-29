@@ -69,4 +69,4 @@
 * Q: 我发誓两边都上传过二维码短链图片 为什么不生效
 * A: 可能没点预览
 
-![Branch](./static/img/pic1.jpg)
+![Branching](./static/img/pic1.jpg)
