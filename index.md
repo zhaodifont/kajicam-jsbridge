@@ -11,3 +11,5 @@
 ### [后台操作流程规范](./faceApi_adminSys.md)
 
 ### [h5活动配置参数日志](./h5EventConfigLog.md)
+
+### [模板更新日志](./templateUpdateLog.md)
