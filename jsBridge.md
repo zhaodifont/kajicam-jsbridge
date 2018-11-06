@@ -3,7 +3,7 @@
 [返回首页](./index.md)
 []()
 
-[Demo地址](https://zhaodifont.github.io/kajicam/index.html)
+[Demo地址](https://zhaodifont.github.io/kajicam/bridge.html)
 
 ### jsBridge的引入
 
