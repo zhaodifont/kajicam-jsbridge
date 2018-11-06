@@ -1,7 +1,12 @@
 
 ##模板更新日志
 
+
+### 2.0.0
+
 ### 1.0.1
+
+> 对应万圣节活动 http://h5-beta.kajicam.com/h5template/halloween/preview/index.html
 
 * 新增page1底部区域背景图片 可配置
 * 信息弹出框 文本颜色统一  可配置

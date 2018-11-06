@@ -3,7 +3,7 @@
 [返回首页](./index.md)
 []()
 
-[Demo地址](https://zhaodifont.github.io/kajicam/index.html)
+[Demo地址](https://zhaodifont.github.io/kajicam/bridge.html)
 
 ### jsBridge的引入
 
@@ -334,17 +334,17 @@ function eventCameraCallback(res, type){
 
 1. InAppBrowser 启动时发送cookie  
 >
-> 产生token cookie 的条件： 1、 在kaji 内嵌游览器打开，2、 一级域名为 ".snowcam.cn", ".b612kaji.com", ".yiruikecorp.com"
+> 产生token cookie 的条件： 
 >
-> 一般pc端打开 获取到曾经缓存过的document.cookie 为 Hm_lvt_c78ba600..... ; Hm_lpvt_c78ba60....; 或空
+>1、 在kaji 内嵌游览器打开，2、 一级域名为 ".snowcam.cn", ".b612kaji.com", ".yiruikecorp.com"
 >
-> token cookie(第一种sessionKey) 为 B6_SES=oOIUgm.....
+> 在pc端打开 一般的document.cookie 为 Hm_lvt_c78ba600..... ; Hm_lpvt_c78ba60....; 或空
 >
-> 第一种sessionKey与用户登录貌似没什么关系 （目前来说）
+> 在app内 document.cookie 有一个(第一种sessionKey) 为 B6_SES=oOIUgm.....
 >
 ```
 bridge.login(userInfo => {
-  console.log(userInfo.B6_SES);  // 这是第二种sessionKey
+  console.log(userInfo.B6_SES);  //  跟第一种sessionKey很像 说是为登录准备的第一种sessionKey的变体 这是第二种sessionKey
 })
 ```
 2. Click按钮 -> 调起 jsBridge.login() function
