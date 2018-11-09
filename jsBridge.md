@@ -319,6 +319,7 @@ function eventCameraCallback(res, type){
 ###  login
 
 ```
+    // 源码
     import UserInfo from "./model/UserInfo";
     login(userCallback) {
         const callbackMethodFullName = this._registerCallback("login", userCallback, UserInfo);
@@ -344,7 +345,7 @@ function eventCameraCallback(res, type){
 >
 ```
 bridge.login(userInfo => {
-  console.log(userInfo.B6_SES);  //  跟第一种sessionKey很像 说是为登录准备的第一种sessionKey的变体 这是第二种sessionKey
+  console.log(userInfo.B6_SES);  //  跟第一种sessionKey很像 为登录准备的变体 这是第二种sessionKey
 })
 ```
 2. Click按钮 -> 调起 jsBridge.login() function
@@ -371,8 +372,20 @@ $.ajax({
 
 ```
 
+### uuid
 
+> inappBrowser请求page时，把URL的 {ad_did}部分转换为uuid的功能，B612咔叽在7.3.0版本以上支持。
+>
+> <a href="b612cnb://inappBrowser?url=http%3A%2F%2Fqa.b612kaji.com%2Ftest%2Ftest_uuid.html%3Fuuid%3D%7Bad_did%7D">UUID</a>
 
+```
+  http://qa.b612kaji.com/test/test_uuid.html?uuid={ad_did}
+  
+```
+
+> uuid获取是用页面url的部分参数转换的方式，外部浏览器也可模仿这个参数，会有滥用的问题。
+>
+> 建议仅支持在inAppBrowser时使用 （jsBridge的 appInfo 来判断是否为inAppBrowser打开）
 
 
 
