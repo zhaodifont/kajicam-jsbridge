@@ -1,4 +1,12 @@
+### 2018.11.14 汉服 flower
 
+#### beta
+
+* uploadUrl：http://qa-b612-fs.snowcam.cn/v1/event/vision/flower/upload-only
+* imgProcess：http://qa-b612-fs.snowcam.cn/v1/event/vision/flower
+* imagePrefix：http://qa-b612.snowcam.cn/owfs/
+* postfix：1,2,3,4,5
+* f:235  c: 20136  s:301197
 
 ### 2018.10 万圣节活动 halloween
 
