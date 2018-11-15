@@ -8,6 +8,14 @@
 * postfix：1,2,3,4,5
 * f:235  c: 20136  s:301197
 
+#### real
+
+* uploadUrl：http://b612-fs.snowcam.cn/v1/event/vision/flower/upload-only
+* imgProcess：https://b612-fs.snowcam.cn/v1/event/vision/flower
+* imagePrefix：https://b612.snowcam.cn/owfs/
+* postfix：1,2,3,4,5
+* f:235  c: 20005  s:301197
+
 ### 2018.10 万圣节活动 halloween
 
 #### beta
