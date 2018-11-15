@@ -12,7 +12,7 @@
 
 * uploadUrl：http://b612-fs.snowcam.cn/v1/event/vision/flower/upload-only
 * imgProcess：https://b612-fs.snowcam.cn/v1/event/vision/flower
-* imagePrefix：https://b612.snowcam.cn/owfs/
+* imagePrefix：https://b612kaji-org.oss-cn-beijing.aliyuncs.com/event/vision/flower
 * postfix：1,2,3,4,5
 * f:235  c: 20005  s:301197
 
@@ -30,7 +30,7 @@
 
 * uploadUrl：http://b612-fs.snowcam.cn/v1/event/vision/halloween/upload-only
 * imgProcess：https://b612-fs.snowcam.cn/v1/event/vision/halloween
-* imagePrefix：https://b612.snowcam.cn/owfs/
+* imagePrefix：https://b612kaji-org.oss-cn-beijing.aliyuncs.com/event/vision/halloween
 * postfix：bad,bride,demon,gothic,maid,nurse,sick,witch
 * f:235  c: 20005  s:301197
 * easeyLink & downLink: https://lnk0.com/easylink/ELpMh4Y5
