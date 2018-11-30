@@ -372,6 +372,30 @@ $.ajax({
 
 ```
 
+### close 
+
+>  在h5页面关闭 webView
+
+```
+// 源码
+
+// android:
+close() {
+        native.close()
+    }
+// ios
+
+  close() {
+        this._calliOSFunction("close", null, null);
+    }
+    
+ // 调用
+ 
+ $('.exit button').click(() => {
+      BridgeFactory.getBridge().close()
+    })
+```
+
 ### uuid
 
 > inappBrowser请求page时，把URL的 {ad_did}部分转换为uuid的功能，B612咔叽在7.3.0版本以上支持。
