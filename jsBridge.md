@@ -164,6 +164,7 @@ export function handleSave(){
   
     // eventCameraWithLandmarks 仅兼容app7.6.0以上
     // 在android中 如果拍照非人脸 则无法触发回调函数 慎用！！
+    // （2018.11.21更新）android 版本7.9.3+ 已修复
     eventCameraWithLandmarks(eventCameraParam, userCallback) {
         const callbackMethodFullName = this._registerCallback("eventCameraWithLandmarks", userCallback,
             CameraResult, eventCameraParam.type, eventCameraParam.cameraPosition);
@@ -189,9 +190,6 @@ export function handleSave(){
     }
     
 ```
-
-
-
 
 > eventCameraParam **这个参数引用自**: ( ./param/EventCameraParam)
 >
@@ -239,8 +237,6 @@ function eventCameraCallback(res, type){
    const type = type // 此次调用的是 相机还是相册
  }
 }
-
-// duiba： 在android手机里面 eventCameraWithLandmarks 非人脸拍照 没有回调
 
 ```
 
