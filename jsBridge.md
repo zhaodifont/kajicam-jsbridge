@@ -35,7 +35,8 @@ export default class BridgeFactory {
 
 ```
 
-> android中 betaApp和realApp最终引用的jsbridge可以是同一份文件（AndroidBridge.js）[]
+> android中 betaApp和realApp最终引用的jsbridge可以是同一份文件（AndroidBridge.js）
+>
 > ios中 betaApp和realApp引用的jsbridge 只有一处区别 (IosBridge.js中的 _calliOSFunction 函数中) : 
   
 ```
@@ -79,7 +80,6 @@ export function handleSave(){
   });
 }
 ```
- 
 >  使用频率较低  注意和 shareWidthCallback的区别
 
 ### shareWithCallback（保存分享图片功能）
@@ -108,7 +108,7 @@ export function handleSaveShare(){
   const param = new SaveShareParam($('#distImg')[0].src, SaveShareParam.types.image);
   let stat = false; //  初始一个变量 这次未统计
   bridgeFactory.getBridge().shareWithCallback(param, result => {
-    if(!stat){ //  这样只统计一次
+    if(!stat){ //  分享的时候 呼起和点击分享面板都会触发 这样能做到精确统计一次
       showToast('保存成功')
       iosState = !iosState
       _hmt.push(['_trackEvent', eventCategory+ inState, 'Btn', '保存分享' + _years[yearAct].imgTial[_styleAct]])
@@ -118,10 +118,9 @@ export function handleSaveShare(){
 }
 ```
  
-> save的进化版  不仅能保存 还分享
+> save的进化版 保存+分享
+> 
 > 分享面板弹出一次的过程中 弹出和关闭都会触发此函数的回调函数
-
-
 
 ### eventCamera & eventCameraWithLandmarks
 ```
@@ -138,10 +137,10 @@ export function handleSaveShare(){
         this._calliOSFunction("eventCamera", eventCameraParam, callbackMethodFullName);
     }
 
-  
     // eventCameraWithLandmarks 仅兼容app7.6.0以上
     // 在android中 如果拍照非人脸 则无法触发回调函数 慎用！！
-    // （2018.11.21更新）android 版本7.9.3+ 已修复
+    // (2018.11.21更新) android 版本7.9.3+ 已修复非人脸无回调bug
+    
     eventCameraWithLandmarks(eventCameraParam, userCallback) {
         const callbackMethodFullName = this._registerCallback("eventCameraWithLandmarks", userCallback,
             CameraResult, eventCameraParam.type, eventCameraParam.cameraPosition);
@@ -149,17 +148,16 @@ export function handleSaveShare(){
         this._calliOSFunction("eventCameraWithLandmarks", eventCameraParam, callbackMethodFullName);
     }
     
-    // android
+    
+    // android 中注意 当前版本中 需要把categoryId、stickerId强制设置为undefined 不然调用时会出现卡死闪退的情况
+    // 只使用 filterId即可
+    // eventCameraWithLandmarks同理
     eventCamera(eventCameraParam, userCallback) {
-        // android 中注意 当前版本中 需要把categoryId、stickerId强制设置为undefined 不然调用时会出现卡死闪退的情况
-        // 只使用 filterId即可
-        // eventCameraWithLandmarks同理
         if(BrowserChecker.isAndroid()) {
             // eventCameraParam.filterId = undefined;
             eventCameraParam.categoryId = undefined;
             eventCameraParam.stickerId = undefined;
         }
-
         const callbackMethodFullName = this._registerCallback(
             "eventCamera", userCallback, EventCameraResult, eventCameraParam.type, eventCameraParam.cameraPosition);
 
@@ -168,10 +166,7 @@ export function handleSaveShare(){
     
 ```
 
-> eventCameraParam **这个参数引用自**: ( ./param/EventCameraParam)
->
-> For example
-> 
+> eventCameraParam 
 
 ```
 import EventCameraParam from "@/common/bridge/param/EventCameraParam";
