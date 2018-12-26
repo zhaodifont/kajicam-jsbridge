@@ -13,7 +13,6 @@ BridgeFactory.getBridge().[调用指定功能]
 
 ```
 =>
-
 ```
 // @/js/bridge/BridgeFactory.js
 
@@ -36,13 +35,8 @@ export default class BridgeFactory {
 
 ```
 
-判断为ios: 引入iosBridge；  android: 引入AndroidBridge；
-
-其他系统: 引入NullBridge (不触发咔叽的功能 只会给一个log提示)
-
-> android中 betaApp和realApp引用的jsbridge可以是同一份文件（AndroidBridge.js）
-
-> ios中 betaApp和realApp引用的jsbridge有且只有一处区别 (IosBridge.js中的 _calliOSFunction 函数中) : 
+> android中 betaApp和realApp最终引用的jsbridge可以是同一份文件（AndroidBridge.js）[]
+> ios中 betaApp和realApp引用的jsbridge 只有一处区别 (IosBridge.js中的 _calliOSFunction 函数中) : 
   
 ```
 // IosBridge.js
@@ -57,7 +51,7 @@ export default class BridgeFactory {
   // 当然 这个场景只会只会出现在ios中
 ```
 
-### appInfo
+### appInfo（查询app信息功能）
 
 > 判断h5页面所在app内/外 
 > 用appInfo方法的回调来判断
@@ -73,7 +67,22 @@ bridgeFactory.getBridge().appInfo(res => {
   // 注 返回的res信息属于异步返回的数据 如果同步的代码中需要使用此信息会失误
 ```
 
-### shareWithCallback
+### save（保存图片功能）
+```
+import SaveShareParam from "@/common/bridge/param/SaveShareParam";
+
+export function handleSave(){
+  const param = new SaveShareParam($('#distImg')[0].src, SaveShareParam.types.image);
+  let stat = false; //  初始一个变量 这次未统计
+  bridgeFactory.getBridge().save(param, result => {
+     // 保存成功
+  });
+}
+```
+ 
+>  使用频率较低  注意和 shareWidthCallback的区别
+
+### shareWithCallback（保存分享图片功能）
 
 ```
 /**
@@ -91,18 +100,11 @@ bridgeFactory.getBridge().appInfo(res => {
 
         this._calliOSFunction("share", options, sharePoppedCallbackName);
     }
- ```
- 
-> save的进化版  不仅能保存 还分享
->
-> 分享面板弹出一次的过程中 弹出和关闭都会触发此函数的回调函数
-> 
-> For example:
-
+```
 ```
 import SaveShareParam from "@/common/bridge/param/SaveShareParam";
 
-export function handleSave(){
+export function handleSaveShare(){
   const param = new SaveShareParam($('#distImg')[0].src, SaveShareParam.types.image);
   let stat = false; //  初始一个变量 这次未统计
   bridgeFactory.getBridge().shareWithCallback(param, result => {
@@ -115,6 +117,11 @@ export function handleSave(){
   });
 }
 ```
+ 
+> save的进化版  不仅能保存 还分享
+> 分享面板弹出一次的过程中 弹出和关闭都会触发此函数的回调函数
+
+
 
 ### eventCamera & eventCameraWithLandmarks
 ```
@@ -209,21 +216,6 @@ function eventCameraCallback(res, type){
 }
 
 ```
-
-### save
-```
-/**
-  * 将页面中的图片或视频 保存到用户的手机终端
-  * @param saveShareParam (@see ./param/SaveShareParam)
-  * @param userCallback
-*/
-    save(saveShareParam, userCallback) {
-        const callbackMethodFullName = this._registerCallback("save", userCallback, AppCommonResult);
-        this._calliOSFunction("save", saveShareParam, callbackMethodFullName);
-    }
- ```
- 
-> 使用频率较低  注意和 shareWidthCallback的区别
 
 ###  getCameraImage
 
