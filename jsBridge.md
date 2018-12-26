@@ -5,28 +5,21 @@
 ### jsBridge的引入
 
 ```
-
-...
 // main.js
 
 import BridgeFactory from '@/js/bridge/BridgeFactory'
 
 let isInApp = false
-BridgeFactory.getBridge().appInfo(res => {
-  //do somethings...
-  //此处为异步结果
-  if(res.app){
-    // isInApp = true
-  }
-})
+BridgeFactory.getBridge().[调用指定功能]
 
+```
 // =>
 
+```
 // @/js/bridge/BridgeFactory.js
-...
+
 import AndroidBridge from "./AndroidBridge";
 import IosBridge from "./IosBridge";
-...
 
 export default class BridgeFactory {
     static getBridge() {
@@ -42,7 +35,6 @@ export default class BridgeFactory {
     }
 }
 
-
 ```
 
 判断为ios: 引入iosBridge；  android: 引入AndroidBridge；
@@ -50,48 +42,26 @@ export default class BridgeFactory {
 其他系统: 引入NullBridge (不触发咔叽的功能 只会给一个log提示)
 
 > android中 betaApp和realApp引用的jsbridge可以是同一份文件（AndroidBridge.js）
-> ios中 betaApp和realApp引用的jsbridge有且只有一处区别 (IosBridge.js中 -> _calliOSFunction 函数中) : 
+> ios中 betaApp和realApp引用的jsbridge有且只有一处区别 (IosBridge.js中的 _calliOSFunction 函数中) : 
   
 ```
-...
 // IosBridge.js
 
  _calliOSFunction(functionName, args, sCallback) {
     let url = scheme + "native/"
     // - ios betaApp 设置此处scheme为 ** b612cnb://native/ ** 
     // - ios realApp 设置此处scheme为 ** b612cn://native/ **
-    ...
+    
  }
-...
+
   // 如果scheme设置错误 出现的场景是 在betaApp跳至realApp 或反之
   // 当然 这个场景只会只会出现在ios中
 ```
 
 ### appInfo
 
-```
-/**
-  * app 在app内部获取app的信息
-  * @param userCallback
-  *    : callback param 0 - ./model/AppInfo
-*/
-    appInfo(userCallback) {
-        // 注册一个回调函数  此回调函数是属于 AppInfo的
-        const callbackMethodFullName = this._registerCallback("appInfo", userCallback, AppInfo);
-        
-        // 通过与app约定好的功能名称唤起此功能  
-        this._calliOSFunction("appInfo", null, callbackMethodFullName);
-         // this.calliOSFunction("appInfo", null, "B612Kaji.Native.ios.Function.getInstance().callback.appInfo")
-        
-    }
-    
-```
-> 判断 h5页面属于app内/外 
->
+> 判断h5页面所在app内/外 
 > 用appInfo方法的回调来判断
->
-> For example (appInfo)
-> 
 
 ```
 let isInApp = false
