@@ -41,6 +41,7 @@ export default class BridgeFactory {
 其他系统: 引入NullBridge (不触发咔叽的功能 只会给一个log提示)
 
 > android中 betaApp和realApp引用的jsbridge可以是同一份文件（AndroidBridge.js）
+
 > ios中 betaApp和realApp引用的jsbridge有且只有一处区别 (IosBridge.js中的 _calliOSFunction 函数中) : 
   
 ```
