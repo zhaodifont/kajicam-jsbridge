@@ -6,14 +6,13 @@
 
 ```
 // main.js
-
 import BridgeFactory from '@/js/bridge/BridgeFactory'
 
 let isInApp = false
 BridgeFactory.getBridge().[调用指定功能]
 
 ```
-// =>
+=>
 
 ```
 // @/js/bridge/BridgeFactory.js
@@ -49,11 +48,10 @@ export default class BridgeFactory {
 
  _calliOSFunction(functionName, args, sCallback) {
     let url = scheme + "native/"
-    // - ios betaApp 设置此处scheme为 ** b612cnb://native/ ** 
-    // - ios realApp 设置此处scheme为 ** b612cn://native/ **
+    // - ios betaApp 设置 scheme = 'b612cnb://native/'
+    // - ios realApp 设置 scheme为 = 'b612cn://native/'
     
  }
-
   // 如果scheme设置错误 出现的场景是 在betaApp跳至realApp 或反之
   // 当然 这个场景只会只会出现在ios中
 ```
