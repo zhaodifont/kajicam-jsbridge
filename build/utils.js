@@ -4,6 +4,9 @@ const config = require('../config')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const packageConfig = require('../package.json')
 
+console.log('------ from:','webpack.prod.config ------');
+console.log('===1=1=1',process.env.NODE_ENV);
+
 exports.assetsPath = function (_path) {
   const assetsSubDirectory = process.env.NODE_ENV === 'dev'
     ? config.dev.assetsSubDirectory
@@ -47,7 +50,8 @@ exports.cssLoaders = function (options) {
     if (options.extract) {
       return ExtractTextPlugin.extract({
         use: loaders,
-        fallback: 'vue-style-loader'
+        publicPath:'../../',
+        // fallback: 'vue-style-loader'
       })
     } else {
       return ['vue-style-loader'].concat(loaders)

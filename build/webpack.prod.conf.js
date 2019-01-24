@@ -12,8 +12,6 @@ const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 // const env = require('../config/prod.env')
-console.log('====config.build.assetsRoot', process.env.NODE_ENV);
-console.log('====', utils.assetsPath('js/[name].[chunkhash:6].js'));
 
 const env = {
   NODE_ENV: "'" + process.env.NODE_ENV + "'"
@@ -21,17 +19,55 @@ const env = {
 
 const webpackConfig = merge(baseWebpackConfig, {
   module: {
-    rules: utils.styleLoaders({
-      sourceMap: config.build.productionSourceMap,
-      extract: true,
-      usePostCSS: true
-    })
+    rules: [
+      ...utils.styleLoaders({
+        sourceMap: config.build.productionSourceMap,
+        extract: true,
+        usePostCSS: true,
+      }),
+      {
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        use:[
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 6000,
+              // name: path.resolve(__dirname, '../dist')
+              name: utils.assetsPath('img/[name].[hash:6].[ext]')
+            }
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: {
+                mozjpeg: {
+                  progressive: true,
+                  quality: 82
+                },
+                // optipng.enabled: false will disable optipng
+                optipng: {
+                  enabled: true,
+                },
+                pngquant: {
+                  quality: '65-90',
+                  speed: 4
+                },
+                gifsicle: {
+                  interlaced: false,
+                }
+                // webp: {
+                //   quality: 75
+                // }
+            }
+          }
+        ]
+      }
+    ]
   },
   devtool: config.build.productionSourceMap ? config.build.devtool : false,
   output: {
     path: config.build.assetsRoot,
-    filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+    filename: utils.assetsPath('js/[name].[chunkhash:6].js'),
+    chunkFilename: utils.assetsPath('js/[id].[chunkhash:6].js')
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
@@ -49,7 +85,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     }),
     // extract css into its own file
     new ExtractTextPlugin({
-      filename: utils.assetsPath('css/[name].[contenthash].css'),
+      filename: utils.assetsPath('css/[name].[contenthash:6].css'),
       // Setting the following option to `false` will not extract CSS from codesplit chunks.
       // Their CSS will instead be inserted dynamically with style-loader when the codesplit chunk has been loaded by webpack.
       // It's currently set to `true` because we are seeing that sourcemaps are included in the codesplit bundle as well when it's `false`,
@@ -60,8 +96,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     // duplicated CSS from different components can be deduped.
     new OptimizeCSSPlugin({
       cssProcessorOptions: config.build.productionSourceMap
-        ? { safe: true, map: { inline: false } }
-        : { safe: true }
+        ? { safe: true, map: { inline: false }, autoprefixer:false }
+        : { safe: true, autoprefixer:false }
     }),
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html

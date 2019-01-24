@@ -1,7 +1,8 @@
 'use strict'
 require('./check-versions')()
 
-// process.env.NODE_ENV = 'production'
+const _config = require('../src/config/index.js')
+
 process.env.NODE_ENV = process.env.NODE_ENV?process.env.NODE_ENV:'production'
 
 const ora = require('ora')

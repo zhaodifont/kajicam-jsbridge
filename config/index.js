@@ -4,9 +4,9 @@
 
 const path = require('path')
 const _config = require('../src/config/index.js')
+console.log('------ from:','config index.js ------');
 console.log('======== env:',process.env.NODE_ENV);
-
-
+console.log('====== config:',_config);
 
 module.exports = {
   dev: {
@@ -54,7 +54,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, _config.assetsRoot + ''),
     assetsSubDirectory: 'static',
-    assetsPublicPath: _config.assetsPublicPath,
+    assetsPublicPath:  _config.assetsPublicPath,
 
     /**
      * Source Maps
