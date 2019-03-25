@@ -90,10 +90,10 @@ $('#cameraBtn').on('click', () => {
     const param = new EventCameraParam(
             EventCameraParam.types.imageCamera, // 字符串 imageCamera: 相机  imageAlbum： 相册
             EventCameraParam.cameraPositions.front, // 前置摄像头 0  后置摄像头: 1
-            baseConfig.filterId, // 滤镜id
-            baseConfig.categoryId, // 分栏id (贴纸是在分栏里面的 所以app一般找贴纸先找到贴纸所在的分栏)
-            baseConfig.stickerId, // 贴纸id
-            '', // 貌似是 音乐id
+            '', // 滤镜id
+            '', // 分栏id (贴纸是在分栏里面的 所以app一般找贴纸先找到贴纸所在的分栏)
+            '', // 贴纸id
+            '2', // 貌似是 音乐id
             'true'  // 已设置默认为true
     );
     BridgeFactory.getBridge().eventCamera(param, eventCameraCallback);

@@ -11,7 +11,7 @@ const cameraPositions = {
 };
 
 export default class EventCameraParam extends BridgeParam {
-    constructor(type='', cameraPosition='', filterId='', categoryId='', stickerId='', collageId = '') {
+    constructor(type = '', cameraPosition = '', filterId = '', categoryId = '', stickerId = '', collageId = '') {
         super();
         if (!types[type]) throw `[illegal type] ${type}`;
         this.type = type;
