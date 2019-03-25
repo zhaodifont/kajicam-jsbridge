@@ -72,6 +72,7 @@ bridgeFactory.getBridge().appInfo(res => {
 ### save
 
 > 保存图片功能  (6.7.0)
+>
 
 ```
 import SaveShareParam from "@/common/bridge/param/SaveShareParam";
@@ -86,6 +87,7 @@ export function handleSave(){
 ```
 
 >  使用频率较低  注意和 shareWidthCallback的区别
+>
 
 ### shareWithCallback
 
