@@ -52,10 +52,11 @@ export default class BridgeFactory {
   // 当然 这个场景只会只会出现在ios中
 ```
 
-### appInfo（查询app信息功能）
+### appInfo（）
 
-> 判断h5页面所在app内/外 
-> 用appInfo方法的回调来判断
+> 查询app信息功能 （6.5.3） 返回的信息带duid（7.10.1）
+>
+> 可以用appInfo方法的回调来判断是否在app内
 
 ```
 let isInApp = false
@@ -68,7 +69,9 @@ bridgeFactory.getBridge().appInfo(res => {
   // 注 返回的res信息属于异步返回的数据 如果同步的代码中需要使用此信息会失误
 ```
 
-### save（保存图片功能）
+### save
+
+> 保存图片功能  (6.7.0)
 ```
 import SaveShareParam from "@/common/bridge/param/SaveShareParam";
 
@@ -82,7 +85,11 @@ export function handleSave(){
 ```
 >  使用频率较低  注意和 shareWidthCallback的区别
 
-### shareWithCallback（保存分享图片功能）
+### shareWithCallback
+
+> save的进化版 保存+分享  （6.5.3）
+> 
+> 分享面板弹出一次的过程中 弹出和关闭都会触发此函数的回调函数
 
 ```
 /**
@@ -94,7 +101,6 @@ export function handleSave(){
     shareWithCallback(saveShareParam, sharePoppedCallback, shareMediaClickedCallback) {
         const sharePoppedCallbackName = this._registerCallback('sharePoppedCallback', sharePoppedCallback, AppCommonResult);
         const shareMediaClickedCallbackName = this._registerCallback('shareMediaClickedCallback', shareMediaClickedCallback, AppCommonResult);
-
         const options = JSON.parse(saveShareParam.toString());
         options.clickShareButton = shareMediaClickedCallbackName;
 
@@ -105,27 +111,33 @@ export function handleSave(){
 import SaveShareParam from "@/common/bridge/param/SaveShareParam";
 
 export function handleSaveShare(){
+  // case1: 分享图片
   const param = new SaveShareParam($('#distImg')[0].src, SaveShareParam.types.image);
+  // case2: 分享视频 const params = new SaveShareParam('https://b612-static.kajicam.com/stickerpr/1391/file_media_1_1545207714759.mp4',SaveShareParam.types.video);
+  //case3: 分享链接
+  // let title="title ==一起来玩最爱的B612咔叽，随手一排就是小仙女～";
+  // let content="content ==一起来玩最爱的B612咔叽，随手一排就是小仙女～";
+  // let url='http://www.baidu.com';
+  // let thumbnail='https://f12.baidu.com/it/u=645678572,3652301717&fm=76' // 图片不能太大
+  // let params = new SaveShareParam('https://b612-static.kajicam.com/stickerpr/1388/file_media_1_1545210560520.jpg',SaveShareParam.types.image);
+  
   let stat = false; //  初始一个变量 这次未统计
   bridgeFactory.getBridge().shareWithCallback(param, result => {
     if(!stat){ //  分享的时候 呼起和点击分享面板都会触发 这样能做到精确统计一次
       showToast('保存成功')
       iosState = !iosState
-      _hmt.push(['_trackEvent', eventCategory+ inState, 'Btn', '保存分享' + _years[yearAct].imgTial[_styleAct]])
+      // 统计一次 _hmt.push(['_trackEvent', eventCategory+ inState, 'Btn', '保存分享' + _years[yearAct].imgTial[_styleAct]])
     }
   }, res => {
   });
 }
 ```
  
-> save的进化版 保存+分享
-> 
-> 分享面板弹出一次的过程中 弹出和关闭都会触发此函数的回调函数
-
 ### eventCamera & eventCameraWithLandmarks
+
+> 调用相机或相册功能 并将拍摄或获取的照片（或人脸坐标）返回给页面  （6.5.0）
 ```
 /**
-  * 调用相机或相册功能 并将拍摄或获取的照片返回给页面.
   * @param eventCameraParam : (@see ./param/EventCameraParam)
   * @param userCallback
 */
@@ -205,7 +217,7 @@ $('#galleryBtn').on('click', function(){
 function eventCameraCallback(res, type){
  if (!!res.success == true) {
    const imgSrc = res.base64Image
-   const landmark = res.landmarks // 如果有坐标 一起传给人脸融合接口 效果更佳
+   const landmark = res.landmarks // （如果有坐标 一起传给人脸融合接口 启用商汤融合技术 效果更佳）
    const type = type // 此次调用的是 相机还是相册
  }
 }
@@ -214,10 +226,11 @@ function eventCameraCallback(res, type){
 
 ###  getCameraImage
 
+>加载最后拍摄的图片 (6.5.3)
 ```
 /**
      * 场景: 用户先在app中使用某贴纸拍照 拍照完出现一个confirmbanner 点击banner 进入H5页面.
-     * 那么进入h5页面后 能够获取到拍摄的照片
+     * 那么进入h5页面后 能够获取到刚拍摄的照片
      * @param userCallback
      */
     getCameraImage(userCallback) {
@@ -236,6 +249,8 @@ function eventCameraCallback(res, type){
 
 ###  login
 
+> 用户登录  （7.7.5）
+
 ```
     // 源码
     import UserInfo from "./model/UserInfo";
@@ -245,19 +260,16 @@ function eventCameraCallback(res, type){
     }
     
 ```
-> 用户登录  app版本7.7.5以上支持
->
-
 > beta版 测试方法
 >
 > 在web打开以下链接，点击BETA按钮，即可进行测试 http://qa.b612kaji.com/app-static/kaji/login-test/link.html
 
-1. InAppBrowser 启动时发送cookie  
+1. InAppBrowser 启动时产出cookie  
 >
 > 出现token cookie 的条件： 
 >
 >1、 在kaji webview中打开，2、 一级域名为 ".snowcam.cn", ".b612kaji.com", ".yiruikecorp.com"
->
+
 > 结果：
 >
 > 在app内 document.cookie 有一个(第一种sessionKey) 为 B6_SES=oOIUgm.....
@@ -293,20 +305,20 @@ $.ajax({
 
 ### close 
 
->  在h5页面关闭 webView （6.5.3版本以上支持）
+>  在咔叽webview中的h5页面关闭webView （6.5.3版本以上支持）
 
 ```
 // 源码
 
 // android:
 close() {
-        native.close()
-    }
+  native.close()
+}
+    
 // ios
-
-  close() {
-        this._calliOSFunction("close", null, null);
-    }
+close() {
+  this._calliOSFunction("close", null, null);
+}
     
  // 调用
  
