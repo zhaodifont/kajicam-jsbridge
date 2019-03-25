@@ -231,43 +231,8 @@ function eventCameraCallback(res, type){
     }
     
  ```
-
-###  _calliOSFunction & _openCustomURLinIFrame
-
-```
-/**
-  * ios 与app联动的原理
-  * (app scheme 决定使用的是beta 还是 real app)
-  *
-  * @param functionName - 与app约定的function name
-  * @param args - 传送参数对象 argument object
-  * @param sCallback - 在app中传出回调
-  * @private
-*/
-    _calliOSFunction(functionName, args, sCallback) {
-        let url = ConfigFactory.scheme + "native/";
-        const callInfo = {};
-        callInfo.functionName = functionName;
-        if (sCallback) {
-            callInfo.success = sCallback;
-        }
-        if (args) {
-            callInfo.args = args;
-        }
-        url += JSON.stringify(callInfo);
-
-        this._openCustomURLinIFrame(url);
-    }
-
-    _openCustomURLinIFrame(src) {
-        const rootElm = document.documentElement;
-        const newFrameElm = document.createElement("IFRAME");
-
-        newFrameElm.setAttribute("src", src);
-        rootElm.appendChild(newFrameElm);
-        newFrameElm.parentNode.removeChild(newFrameElm);
-    }
- ```
+ 
+ 
 
 ###  login
 
@@ -280,19 +245,20 @@ function eventCameraCallback(res, type){
     }
     
 ```
-> 仅app版本7.7.5以上支持
+> 用户登录  app版本7.7.5以上支持
 >
+
 > beta版 测试方法
 >
 > 在web打开以下链接，点击BETA按钮，即可进行测试 http://qa.b612kaji.com/app-static/kaji/login-test/link.html
 
 1. InAppBrowser 启动时发送cookie  
 >
-> 产生token cookie 的条件： 
+> 出现token cookie 的条件： 
 >
->1、 在kaji 内嵌游览器打开，2、 一级域名为 ".snowcam.cn", ".b612kaji.com", ".yiruikecorp.com"
+>1、 在kaji webview中打开，2、 一级域名为 ".snowcam.cn", ".b612kaji.com", ".yiruikecorp.com"
 >
-> 在pc端打开 一般的document.cookie 为 Hm_lvt_c78ba600..... ; Hm_lpvt_c78ba60....; 或空
+> 结果：
 >
 > 在app内 document.cookie 有一个(第一种sessionKey) 为 B6_SES=oOIUgm.....
 >
@@ -327,7 +293,7 @@ $.ajax({
 
 ### close 
 
->  在h5页面关闭 webView
+>  在h5页面关闭 webView （6.5.3版本以上支持）
 
 ```
 // 源码
@@ -351,7 +317,7 @@ close() {
 
 ### uuid
 
-> inappBrowser请求page时，把URL的 {ad_did}部分转换为uuid的功能，B612咔叽在7.3.0版本以上支持。
+> inappBrowser请求page时，把URL的 {ad_did}部分转换为uuid的功能。 （7.3.0版本以上支持）
 > 
 
 ```
