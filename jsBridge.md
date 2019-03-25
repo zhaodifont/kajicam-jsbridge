@@ -113,8 +113,9 @@ import SaveShareParam from "@/common/bridge/param/SaveShareParam";
 export function handleSaveShare(){
   // case1: 分享图片
   const param = new SaveShareParam($('#distImg')[0].src, SaveShareParam.types.image);
-  // case2: 分享视频 const params = new SaveShareParam('https://b612-static.kajicam.com/stickerpr/1391/file_media_1_1545207714759.mp4',SaveShareParam.types.video);
-  //case3: 分享链接
+  // case2: 分享视频 
+  // const params = new SaveShareParam('https://b612-static.kajicam.com/stickerpr/1391/file_media_1_1545207714759.mp4',SaveShareParam.types.video);
+  // case3: 分享链接 (8.0.0新增功能)
   // let title="title ==一起来玩最爱的B612咔叽，随手一排就是小仙女～";
   // let content="content ==一起来玩最爱的B612咔叽，随手一排就是小仙女～";
   // let url='http://www.baidu.com';
@@ -244,8 +245,20 @@ function eventCameraCallback(res, type){
     }
     
  ```
- 
- 
+
+### uuid
+
+> inappBrowser请求page时，把URL的 {ad_did}部分转换为uuid的功能。 （7.3.0版本以上支持）
+
+```
+  http://qa.b612kaji.com/test/test_uuid.html?uuid={ad_did}
+  <a href="b612cnb://inappBrowser?url=http%3A%2F%2Fqa.b612kaji.com%2Ftest%2Ftest_uuid.html%3Fuuid%3D%7Bad_did%7D">UUID</a>
+```
+
+> uuid获取是用页面url的部分参数转换的方式，外部浏览器也可模仿这个参数，会有滥用的问题。
+>
+> 建议仅支持在inAppBrowser时使用 （jsBridge的 appInfo 来判断是否为inAppBrowser打开）
+
 
 ###  login
 
@@ -327,19 +340,14 @@ close() {
     })
 ```
 
-### uuid
+### titleBarVisible
 
-> inappBrowser请求page时，把URL的 {ad_did}部分转换为uuid的功能。 （7.3.0版本以上支持）
-> 
+> 隐藏title区域，全屏展示 (7.10.1)
 
 ```
-  http://qa.b612kaji.com/test/test_uuid.html?uuid={ad_did}
-  <a href="b612cnb://inappBrowser?url=http%3A%2F%2Fqa.b612kaji.com%2Ftest%2Ftest_uuid.html%3Fuuid%3D%7Bad_did%7D">UUID</a>
+  	b612cnb://native/{"functionName":"titleBarVisible","args":{"isVisible": false}}
 ```
 
-> uuid获取是用页面url的部分参数转换的方式，外部浏览器也可模仿这个参数，会有滥用的问题。
->
-> 建议仅支持在inAppBrowser时使用 （jsBridge的 appInfo 来判断是否为inAppBrowser打开）
 
 
 
