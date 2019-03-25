@@ -37,8 +37,8 @@ export default class BridgeFactory {
 
 > android中 betaApp和realApp最终引用的jsbridge可以是同一份文件（AndroidBridge.js）
 >
-> ios中 betaApp和realApp引用的jsbridge 只有一处区别 (IosBridge.js中的 _calliOSFunction 函数中) : 
-  
+> ios中 betaApp和realApp引用的jsbridge 只有一处区别 (IosBridge.js中的 _calliOSFunction 函数中) :
+
 ```
 // IosBridge.js
 
@@ -46,13 +46,13 @@ export default class BridgeFactory {
     let url = scheme + "native/"
     // - ios betaApp 设置 scheme = 'b612cnb://native/'
     // - ios realApp 设置 scheme为 = 'b612cn://native/'
-    
+
  }
   // 如果scheme设置错误 出现的场景是 在betaApp跳至realApp 或反之
   // 当然 这个场景只会只会出现在ios中
 ```
 
-### appInfo（）
+### appInfo
 
 > 查询app信息功能 （6.5.3） 返回的信息带duid（7.10.1）
 >
@@ -88,7 +88,7 @@ export function handleSave(){
 ### shareWithCallback
 
 > save的进化版 保存+分享  （6.5.3）
-> 
+>
 > 分享面板弹出一次的过程中 弹出和关闭都会触发此函数的回调函数
 
 ```
@@ -113,7 +113,7 @@ import SaveShareParam from "@/common/bridge/param/SaveShareParam";
 export function handleSaveShare(){
   // case1: 分享图片
   const param = new SaveShareParam($('#distImg')[0].src, SaveShareParam.types.image);
-  // case2: 分享视频 
+  // case2: 分享视频
   // const params = new SaveShareParam('https://b612-static.kajicam.com/stickerpr/1391/file_media_1_1545207714759.mp4',SaveShareParam.types.video);
   // case3: 分享链接 (8.0.0新增功能)
   // let title="title ==一起来玩最爱的B612咔叽，随手一排就是小仙女～";
@@ -121,7 +121,7 @@ export function handleSaveShare(){
   // let url='http://www.baidu.com';
   // let thumbnail='https://f12.baidu.com/it/u=645678572,3652301717&fm=76' // 图片不能太大
   // let params = new SaveShareParam('https://b612-static.kajicam.com/stickerpr/1388/file_media_1_1545210560520.jpg',SaveShareParam.types.image);
-  
+
   let stat = false; //  初始一个变量 这次未统计
   bridgeFactory.getBridge().shareWithCallback(param, result => {
     if(!stat){ //  分享的时候 呼起和点击分享面板都会触发 这样能做到精确统计一次
@@ -133,7 +133,7 @@ export function handleSaveShare(){
   });
 }
 ```
- 
+
 ### eventCamera & eventCameraWithLandmarks
 
 > 调用相机或相册功能 并将拍摄或获取的照片（或人脸坐标）返回给页面  （6.5.0）
@@ -153,15 +153,15 @@ export function handleSaveShare(){
     // eventCameraWithLandmarks 仅兼容app7.6.0以上
     // 在android中 如果拍照非人脸 则无法触发回调函数 慎用！！
     // (2018.11.21更新) android 版本7.9.3+ 已修复非人脸无回调bug
-    
+
     eventCameraWithLandmarks(eventCameraParam, userCallback) {
         const callbackMethodFullName = this._registerCallback("eventCameraWithLandmarks", userCallback,
             CameraResult, eventCameraParam.type, eventCameraParam.cameraPosition);
 
         this._calliOSFunction("eventCameraWithLandmarks", eventCameraParam, callbackMethodFullName);
     }
-    
-    
+
+
     // android 中注意 当前版本中 需要把categoryId、stickerId强制设置为undefined 不然调用时会出现卡死闪退的情况
     // 只使用 filterId即可
     // eventCameraWithLandmarks同理
@@ -176,10 +176,10 @@ export function handleSaveShare(){
 
         native.eventCamera(callbackMethodFullName, eventCameraParam.toString(true));
     }
-    
+
 ```
 
-> eventCameraParam 
+> eventCameraParam
 
 ```
 import EventCameraParam from "@/common/bridge/param/EventCameraParam";
@@ -205,14 +205,14 @@ $('#galleryBtn').on('click', function(){
   bridgeFactory.getBridge().eventCamera(galleryParams, eventCameraCallback)
    _hmt.push(['_trackEvent', eventCategory+ inState, 'Btn', '相册选取'])
 })
-      
+
 ```
 > eventCameraWithLandmarks 为更高级的接口 不仅能返回拍摄、选取的照片  
 >
 > 如果拍摄、选取的是人物脸部 能够获取此照片的脸部坐标 一起返回给页面
 >
 > For example
-> 
+>
 
 ```
 function eventCameraCallback(res, type){
@@ -243,7 +243,7 @@ function eventCameraCallback(res, type){
         const callbackMethodFullName = this._registerCallback("getCameraImageWithLandmarks", userCallback, CameraResult);
         this._calliOSFunction("getCameraImageWithLandmarks", null, callbackMethodFullName);
     }
-    
+
  ```
 
 ### uuid
@@ -271,7 +271,7 @@ function eventCameraCallback(res, type){
         const callbackMethodFullName = this._registerCallback("login", userCallback, UserInfo);
         this._calliOSFunction("login", null, callbackMethodFullName);
     }
-    
+
 ```
 > beta版 测试方法
 >
@@ -279,7 +279,7 @@ function eventCameraCallback(res, type){
 
 1. InAppBrowser 启动时产出cookie  
 >
-> 出现token cookie 的条件： 
+> 出现token cookie 的条件：
 >
 >1、 在kaji webview中打开，2、 一级域名为 ".snowcam.cn", ".b612kaji.com", ".yiruikecorp.com"
 
@@ -297,7 +297,7 @@ bridge.login(userInfo => {
 4. session key -> API SERVER -> user 信息查询 (通过userInfo.B6_SES 发送ajax请求获取用户信息)
 
 ```
-var sessionKey = document.cookie.split("=")[1]; 
+var sessionKey = document.cookie.split("=")[1];
 //var sessionKey = "N9CtB4ZZOfEjGCk9i4le0oO4StKZrGBgW2l+lQQIjBboQmKQmWlYN3BRtLXfrpOCxFC7wQtYXHdIIYOw6+Itwyh25rv2reM93aXWEMGaEdI=";
 console.log(sessionKey);
 var url = "http://qa-api.b612kaji.com/v2/user/me";
@@ -316,7 +316,7 @@ $.ajax({
 
 ```
 
-### close 
+### close
 
 >  在咔叽webview中的h5页面关闭webView （6.5.3版本以上支持）
 
@@ -327,14 +327,14 @@ $.ajax({
 close() {
   native.close()
 }
-    
+
 // ios
 close() {
   this._calliOSFunction("close", null, null);
 }
-    
+
  // 调用
- 
+
  $('.exit button').click(() => {
       BridgeFactory.getBridge().close()
     })
@@ -353,5 +353,3 @@ close() {
 
 
 [返回首页](./index.md)
-
-
