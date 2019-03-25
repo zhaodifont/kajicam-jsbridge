@@ -142,6 +142,8 @@ export function handleSaveShare(){
 ### eventCamera & eventCameraWithLandmarks
 
 > 调用相机或相册功能 并将拍摄或获取的照片（或人脸坐标）返回给页面  （6.5.0）
+>
+
 ```
 /**
   * @param eventCameraParam : (@see ./param/EventCameraParam)
@@ -185,6 +187,7 @@ export function handleSaveShare(){
 ```
 
 > eventCameraParam
+>
 
 ```
 import EventCameraParam from "@/common/bridge/param/EventCameraParam";
@@ -233,6 +236,8 @@ function eventCameraCallback(res, type){
 ###  getCameraImage
 
 >加载最后拍摄的图片 (6.5.3)
+>
+
 ```
 /**
      * 场景: 用户先在app中使用某贴纸拍照 拍照完出现一个confirmbanner 点击banner 进入H5页面.
@@ -254,6 +259,7 @@ function eventCameraCallback(res, type){
 ### uuid
 
 > inappBrowser请求page时，把URL的 {ad_did}部分转换为uuid的功能。 （7.3.0版本以上支持）
+>
 
 ```
   http://qa.b612kaji.com/test/test_uuid.html?uuid={ad_did}
@@ -268,6 +274,7 @@ function eventCameraCallback(res, type){
 ###  login
 
 > 用户登录  （7.7.5）
+>
 
 ```
     // 源码
@@ -281,6 +288,7 @@ function eventCameraCallback(res, type){
 > beta版 测试方法
 >
 > 在web打开以下链接，点击BETA按钮，即可进行测试 http://qa.b612kaji.com/app-static/kaji/login-test/link.html
+>
 
 1. InAppBrowser 启动时产出cookie  
 >
@@ -324,6 +332,7 @@ $.ajax({
 ### close
 
 >  在咔叽webview中的h5页面关闭webView （6.5.3版本以上支持）
+>
 
 ```
 // 源码
@@ -348,6 +357,7 @@ close() {
 ### titleBarVisible
 
 > 隐藏title区域，全屏展示 (7.10.1)
+>
 
 ```
   	b612cnb://native/{"functionName":"titleBarVisible","args":{"isVisible": false}}
