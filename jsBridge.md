@@ -226,7 +226,7 @@ $('#galleryBtn').on('click', function(){
 function eventCameraCallback(res, type){
  if (!!res.success == true) {
    const imgSrc = res.base64Image
-   const landmark = res.landmarks // （如果有坐标 一起传给人脸融合接口 启用商汤融合技术 效果更佳）
+   const landmark = res.landmarks // （如果有坐标 一起传给人脸融合接口 约定启用商汤融合技术 效果更佳）
    const type = type // 此次调用的是 相机还是相册
  }
 }
@@ -285,12 +285,13 @@ function eventCameraCallback(res, type){
     }
 
 ```
+
 > beta版 测试方法
 >
 > 在web打开以下链接，点击BETA按钮，即可进行测试 http://qa.b612kaji.com/app-static/kaji/login-test/link.html
 >
 
-1. InAppBrowser 启动时产出cookie  
+step1. InAppBrowser 启动时产出cookie  
 >
 > 出现token cookie 的条件：
 >
@@ -305,9 +306,9 @@ bridge.login(userInfo => {
   console.log(userInfo.B6_SES);  //  跟第一种sessionKey很像 为登录准备的变体 这是第二种sessionKey
 })
 ```
-2. Click按钮 -> 调起 jsBridge.login() function
-3. 登录成功后，输出通过callback 发送的session key  (userInfo.B6_SES 第二种sessionKey)
-4. session key -> API SERVER -> user 信息查询 (通过userInfo.B6_SES 发送ajax请求获取用户信息)
+step2. Click按钮 -> 调起 jsBridge.login() function
+step3. 登录成功后，输出通过callback 发送的session key  (userInfo.B6_SES 第二种sessionKey)
+step4. session key -> API SERVER -> user 信息查询 (通过userInfo.B6_SES 发送ajax请求获取用户信息)
 
 ```
 var sessionKey = document.cookie.split("=")[1];
