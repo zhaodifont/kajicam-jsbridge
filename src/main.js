@@ -10,8 +10,8 @@ import baseConfig from '@/config/index'
 import EventCameraParam from "@/js/bridge/param/EventCameraParam";
 import SaveShareParam from "@/js/bridge/param/SaveShareParam";
 // import 'zepto/src/ajax'
-
-console.log(process.env.NODE_ENV)
+let pathSlice = process.env.NODE_ENV == 'production'? 'release':'beta'
+console.log(`${baseConfig.b612Scheme}inappBrowser?url=https://zhaodifont.github.io/kajicam/dist/${pathSlice}/index.html%3Fuuid%3D%7Bad_did%7D`)
 
 var vConsole = new VConsole();
 
@@ -47,6 +47,7 @@ BridgeFactory.getBridge().appInfo(res => {
     // 显示getUUid
     $('#getUUid').show()
 
+    $('#getUUid').attr('href', `${baseConfig.b612Scheme}inappBrowser?url=https://zhaodifont.github.io/kajicam/dist/${pathSlice}/index.html%3Fuuid%3D%7Bad_did%7D`)
     $('.exit').show()
     $('.exit button').click(() => {
       BridgeFactory.getBridge().close()
@@ -146,21 +147,22 @@ $('#shareVideo').on('click', () => {
       BridgeFactory.getBridge().shareWithCallback(params,result => {
         if(!iosShared){
           iosShared = !iosShared
-          alert('点击了分享');
+          alert('video has been saved')
         }
       }, res => {
       })
 })
 
 $('#sharePage').on('click', () => {
-  let title="title ==一起来玩最爱的B612咔叽，随手一排就是小仙女～";
-  let content="content ==一起来玩最爱的B612咔叽，随手一排就是小仙女～";
+  let title="set title: 一起来玩最爱的B612咔叽，随手一排就是小仙女～";
+  let content="set content: 一起来玩最爱的B612咔叽，随手一排就是小仙女～";
   let url='http://www.baidu.com';
-  let thumbnail='https://f12.baidu.com/it/u=645678572,3652301717&fm=76'
+  let thumbnail='https://dummyimage.com/850x850/b293a4/fff&text=someImg'
+  // https://f12.baidu.com/it/u=645678572,3652301717&fm=76
 
   let params = new SaveShareParam(url,SaveShareParam.types.web,title,content,thumbnail);
   BridgeFactory.getBridge().shareWithCallback(params,result=>{
-    alert('分享链接')
+    alert('callback')
   })
 })
 
@@ -168,7 +170,7 @@ $('#shareImage').on('click', () => {
   let params = new SaveShareParam('https://b612-static.kajicam.com/stickerpr/1388/file_media_1_1545210560520.jpg',SaveShareParam.types.image);
   console.log(params)
   bridgeFactory.getBridge().shareWithCallback(params,result => {
-   alert('分享成功')
+   alert('callback')
   }, res => {
   })
 })
