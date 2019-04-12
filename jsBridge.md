@@ -72,6 +72,8 @@ bridgeFactory.getBridge().appInfo(res => {
 ### save
 
 > 保存图片功能  (6.7.0)
+>
+
 ```
 import SaveShareParam from "@/common/bridge/param/SaveShareParam";
 
@@ -83,7 +85,9 @@ export function handleSave(){
   });
 }
 ```
+
 >  使用频率较低  注意和 shareWidthCallback的区别
+>
 
 ### shareWithCallback
 
@@ -107,6 +111,7 @@ export function handleSave(){
         this._calliOSFunction("share", options, sharePoppedCallbackName);
     }
 ```
+
 ```
 import SaveShareParam from "@/common/bridge/param/SaveShareParam";
 
@@ -137,6 +142,8 @@ export function handleSaveShare(){
 ### eventCamera & eventCameraWithLandmarks
 
 > 调用相机或相册功能 并将拍摄或获取的照片（或人脸坐标）返回给页面  （6.5.0）
+>
+
 ```
 /**
   * @param eventCameraParam : (@see ./param/EventCameraParam)
@@ -180,6 +187,7 @@ export function handleSaveShare(){
 ```
 
 > eventCameraParam
+>
 
 ```
 import EventCameraParam from "@/common/bridge/param/EventCameraParam";
@@ -218,7 +226,7 @@ $('#galleryBtn').on('click', function(){
 function eventCameraCallback(res, type){
  if (!!res.success == true) {
    const imgSrc = res.base64Image
-   const landmark = res.landmarks // （如果有坐标 一起传给人脸融合接口 启用商汤融合技术 效果更佳）
+   const landmark = res.landmarks // （如果有坐标 一起传给人脸融合接口 约定启用商汤融合技术 效果更佳）
    const type = type // 此次调用的是 相机还是相册
  }
 }
@@ -228,6 +236,8 @@ function eventCameraCallback(res, type){
 ###  getCameraImage
 
 >加载最后拍摄的图片 (6.5.3)
+>
+
 ```
 /**
      * 场景: 用户先在app中使用某贴纸拍照 拍照完出现一个confirmbanner 点击banner 进入H5页面.
@@ -249,6 +259,7 @@ function eventCameraCallback(res, type){
 ### uuid
 
 > inappBrowser请求page时，把URL的 {ad_did}部分转换为uuid的功能。 （7.3.0版本以上支持）
+>
 
 ```
   http://qa.b612kaji.com/test/test_uuid.html?uuid={ad_did}
@@ -263,6 +274,7 @@ function eventCameraCallback(res, type){
 ###  login
 
 > 用户登录  （7.7.5）
+>
 
 ```
     // 源码
@@ -273,11 +285,13 @@ function eventCameraCallback(res, type){
     }
 
 ```
+
 > beta版 测试方法
 >
 > 在web打开以下链接，点击BETA按钮，即可进行测试 http://qa.b612kaji.com/app-static/kaji/login-test/link.html
+>
 
-1. InAppBrowser 启动时产出cookie  
+step1. InAppBrowser 启动时产出cookie  
 >
 > 出现token cookie 的条件：
 >
@@ -292,9 +306,9 @@ bridge.login(userInfo => {
   console.log(userInfo.B6_SES);  //  跟第一种sessionKey很像 为登录准备的变体 这是第二种sessionKey
 })
 ```
-2. Click按钮 -> 调起 jsBridge.login() function
-3. 登录成功后，输出通过callback 发送的session key  (userInfo.B6_SES 第二种sessionKey)
-4. session key -> API SERVER -> user 信息查询 (通过userInfo.B6_SES 发送ajax请求获取用户信息)
+step2. Click按钮 -> 调起 jsBridge.login() function
+step3. 登录成功后，输出通过callback 发送的session key  (userInfo.B6_SES 第二种sessionKey)
+step4. session key -> API SERVER -> user 信息查询 (通过userInfo.B6_SES 发送ajax请求获取用户信息)
 
 ```
 var sessionKey = document.cookie.split("=")[1];
@@ -319,6 +333,7 @@ $.ajax({
 ### close
 
 >  在咔叽webview中的h5页面关闭webView （6.5.3版本以上支持）
+>
 
 ```
 // 源码
@@ -343,6 +358,7 @@ close() {
 ### titleBarVisible
 
 > 隐藏title区域，全屏展示 (7.10.1)
+>
 
 ```
   	b612cnb://native/{"functionName":"titleBarVisible","args":{"isVisible": false}}
