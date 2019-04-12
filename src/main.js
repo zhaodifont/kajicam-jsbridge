@@ -11,6 +11,8 @@ import EventCameraParam from "@/js/bridge/param/EventCameraParam";
 import SaveShareParam from "@/js/bridge/param/SaveShareParam";
 // import 'zepto/src/ajax'
 
+console.log(process.env.NODE_ENV)
+
 var vConsole = new VConsole();
 
 var appState = {
@@ -37,6 +39,7 @@ BridgeFactory.getBridge().appInfo(res => {
   if (res.app) {
     appState.isInApp = true
     document.querySelector('.baseState').innerText = JSON.stringify(appState)
+    document.querySelector('.shareDom').style.display = 'block'
 
     // 显示eventCameraWithLandmarksBtn
     $('#eventCameraWithLandmarksBtn').css('display','inline-block')
@@ -124,9 +127,9 @@ $('#eventCameraWithLandmarksBtn').on('click', () => {
 // saveVideo
 $('#saveBtn').on('click', () => {
   alert($('#distImg')[0].src.length)
-  if($('#distImg')[0].src.length == 0) {
+  if ($('#distImg')[0].src.length == 0) {
     alert('请选择或拍照')
-  }else {
+  } else {
     const param = new SaveShareParam(
       $('#distImg').attr('src'),
       SaveShareParam.types.image

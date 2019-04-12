@@ -73,21 +73,21 @@
       <var class="landmarks"></var>
       <img src="" width="100%" id="distImg" alt="">
     </div>
-    <button type="button" id="galleryBtn" name="button">从相册选取</button>
-    <button type="button" id="cameraBtn" name="button">用相机拍照</button>
-    <button type="button" id="saveBtn" name="button" style="display:none">保存图片</button>
+    <button type="button" id="galleryBtn" name="button">selectFromAlbum</button>
+    <button type="button" id="cameraBtn" name="button">selectFromCamera</button>
+    <button type="button" id="saveBtn" name="button" style="display:none">saveImage</button>
     <button type="button" id="eventCameraWithLandmarksBtn" name="button" style="display:none;">eventCameraWithLandmarks</button>
   </div>
 
   <h4>UUID (设备唯一id)</h4>
-  <a href="b612cnb://inappBrowser?url=https://zhaodifont.github.io/kajicam/dist/beta/index.html%3Fuuid%3D%7Bad_did%7D" id="getUUid" style="display:none;">获取uuid</a> <span class="getUUidVal">...</span>
+  <a href="b612cnb://inappBrowser?url=https://zhaodifont.github.io/kajicam/dist/beta/index.html%3Fuuid%3D%7Bad_did%7D" id="getUUid" style="display:none;">get uuid</a> <span class="getUUidVal">...</span>
   <br />
   <br />
-  <div class="shareDom">
-    <h4>分享</h4>
-    <button type="button" id="shareVideo" name="button">分享视频</button>
-    <button type="button" id="sharePage" name="button">分享页面</button>
-    <button type="button" id="shareImage" name="button">分享图片</button>
+  <div class="shareDom" style="display:none">
+    <h4>Share</h4>
+    <button type="button" id="shareVideo" name="button">shareVideo</button>
+    <button type="button" id="sharePage" name="button">sharePage</button>
+    <button type="button" id="shareImage" name="button">shareImage</button>
   </div>
 
 
@@ -96,7 +96,10 @@
 
 </div>
 <div class="reload-Btn" onclick="window.location.reload()">
-  刷新
+  Reload
 </div>
 </body>
+<script type="text/javascript">
+  
+</script>
 </html>
