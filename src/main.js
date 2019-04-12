@@ -169,7 +169,7 @@ $('#sharePage').on('click', () => {
 $('#shareImage').on('click', () => {
   let params = new SaveShareParam('https://b612-static.kajicam.com/stickerpr/1388/file_media_1_1545210560520.jpg',SaveShareParam.types.image);
   console.log(params)
-  bridgeFactory.getBridge().shareWithCallback(params,result => {
+  BridgeFactory.getBridge().shareWithCallback(params,result => {
    alert('callback')
   }, res => {
   })
