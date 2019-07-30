@@ -28,15 +28,23 @@ export default class NullBridge extends AbstractBridge {
         console.log('[NullBridge] eventCamera, param : ' + eventCameraParam.toString());
     }
 
-	eventCameraWithLandmarks(eventCameraParam, userCallback) {
-		console.log('[NullBridge] eventCamera, param : ' + eventCameraParam.toString());
+    eventCameraWithLandmarks(eventCameraParam, userCallback) {
+      console.log('[NullBridge] eventCamera, param : ' + eventCameraParam.toString());
     }
 
     getCameraImage(userCallback) {
         console.log('[NullBridge] getCameraImage');
     }
 
-	getCameraImageWithLandmarks(userCallback) {
+    getCameraImageWithLandmarks(userCallback) {
         console.log('[NullBridge] getCameraImage');
+    }
+
+    close() {
+      console.log('[NullBridge] close');
+    }
+
+    titleBarVisible(isVisible){
+      console.log('[NullBridge] titleBarVisible, param : ' + isVisible.toString());
     }
 }

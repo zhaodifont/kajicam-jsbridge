@@ -90,6 +90,13 @@ export default class IosBridge extends AbstractBridge {
         this._calliOSFunction("close", null, null);
     }
 
+    titleBarVisible(isVisible = false) {
+      if (BrowserChecker.appVersionLessThan([7, 10, 1])){
+        alert('this version is not support this method')
+        return
+      }
+      this._calliOSFunction("titleBarVisible", {"isVisible":isVisible});
+    }
     /**
      * ios app과 연동하기 위한 method
      * (app scheme을 통해 연동)

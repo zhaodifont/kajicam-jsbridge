@@ -20,7 +20,7 @@ export default class AndroidBridge extends AbstractBridge {
     }
 
     /**
-     * app 정보 요청 (정확히 어떤 정보 ?)
+     * app 返回基础信息
      * @param userCallback
      *    : callback param 0 - ./model/AppInfo
      */
@@ -30,7 +30,7 @@ export default class AndroidBridge extends AbstractBridge {
     }
 
     /**
-     * 앱에게 이미지 또는 비디오를 전달하여 단말에 저장을 요청한다.
+     * 向应用程序传送图像或录像带，要求在短时间内储存。
      * @param saveShareParam (@see ./param/SaveShareParam)
      * @param userCallback
      */
@@ -40,7 +40,7 @@ export default class AndroidBridge extends AbstractBridge {
     }
 
     /**
-     * 앱에게 이미지 또는 비디오를 전달하여 공유를 요청한다.
+     * 向app传递图像或录像带请求分享。
      * @param saveShareParam (@see ./param/SaveShareParam)
      * @param sharePoppedCallback - app에서 공유 div를 보여준 후 호출되는 callback
      * @param shareMediaClickedCallback - app에서 share 매체를 선택한 후 callback (호출되지 않는데 ??)
@@ -61,12 +61,11 @@ export default class AndroidBridge extends AbstractBridge {
      */
     eventCamera(eventCameraParam, userCallback) {
         //기획 변경 : 안드로이드의 경우에는 속도이슈로 Filter만 적용(Sticker 제외)
-        if(BrowserChecker.isAndroid()) {
+        if (BrowserChecker.isAndroid()) {
             // eventCameraParam.filterId = undefined;
-            eventCameraParam.categoryId = undefined;
-            eventCameraParam.stickerId = undefined;
+            // eventCameraParam.categoryId = undefined;
+            // eventCameraParam.stickerId = undefined;
         }
-
         const callbackMethodFullName = this._registerCallback(
             "eventCamera", userCallback, EventCameraResult, eventCameraParam.type, eventCameraParam.cameraPosition);
 
@@ -75,8 +74,8 @@ export default class AndroidBridge extends AbstractBridge {
 
     eventCameraWithLandmarks(eventCameraParam, userCallback) {
         //기획 변경 : 안드로이드의 경우에는 속도이슈로 Filter만 적용(Sticker 제외)
-        if(BrowserChecker.isAndroid()) {
-            // eventCameraParam.filterId = undefined;
+        if (BrowserChecker.isAndroid()) {
+            eventCameraParam.filterId = undefined;
             eventCameraParam.categoryId = undefined;
             eventCameraParam.stickerId = undefined;
         }
@@ -88,7 +87,7 @@ export default class AndroidBridge extends AbstractBridge {
     }
 
     /**
-     * 마지막으로 촬영한 사진을 가져온다.
+     * 把进入页面前拍摄的照片带入h5页面，通过confirmbanner进入才可实现
      * @param userCallback
      */
     getCameraImage(userCallback) {
@@ -100,11 +99,20 @@ export default class AndroidBridge extends AbstractBridge {
         const callbackMethodFullName = this._registerCallback("getCameraImageWithLandmarks", userCallback, CameraResult);
         native.getCameraImageWithLandmarks(callbackMethodFullName);
     }
-
+    // 关闭页面
     close() {
-        // const callbackMethodFullName = this._registerCallback("close", '', AppCommonResult);
-        // const callbackMethodFullName = this._registerCallback("close", '', '');
-        // native.close(callbackMethodFullName, saveShareParam.toString());
-        native.close()
+      if (BrowserChecker.appVersionLessThan([6, 5, 3])){
+        alert('this version is not support this method')
+        return
+      }
+      native.close()
+    }
+    // 隐藏titlebar
+    titleBarVisible(isVisible = false) {
+      if (BrowserChecker.appVersionLessThan([7, 10, 1])){
+        alert('this version is not support this method')
+        return
+      }
+      native.titleBarVisible(JSON.stringify({isVisible:isVisible}));
     }
 }

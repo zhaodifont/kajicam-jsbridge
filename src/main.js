@@ -2,7 +2,6 @@ import 'babel-polyfill'
 
 import BridgeFactory from '@/js/bridge/BridgeFactory'
 import BrowserChecker from "@/js/util/BrowserChecker"
-import config from '@/config/index'
 import 'zepto/src/zepto'
 import 'zepto/src/event'
 import baseConfig from '@/config/index'
@@ -38,19 +37,26 @@ BridgeFactory.getBridge().appInfo(res => {
   document.querySelector('.AppInfo').innerText = JSON.stringify(res)
   if (res.app) {
     appState.isInApp = true
+    window.kajiAppVersion = res.app.split('.')
+    console.log(window.kajiAppVersion);
     document.querySelector('.baseState').innerText = JSON.stringify(appState)
     document.querySelector('.shareDom').style.display = 'block'
 
     // 显示eventCameraWithLandmarksBtn
-    $('#eventCameraWithLandmarksBtn').css('display','inline-block')
+    $('#eventCameraWithLandmarksBtn').css('display', 'inline-block')
 
     // 显示getUUid
     $('#getUUid').show()
 
     $('#getUUid').attr('href', `${baseConfig.b612Scheme}inappBrowser?url=https://zhaodifont.github.io/kajicam/dist/${pathSlice}/index.html%3Fuuid%3D%7Bad_did%7D`)
-    $('.exit').show()
-    $('.exit button').click(() => {
+    $('.appControl').show()
+    $('.exit').click(() => {
       BridgeFactory.getBridge().close()
+    })
+    let state = true
+    $('.titleBarVisible').click(() => {
+      state = !state
+      BridgeFactory.getBridge().titleBarVisible(state)
     })
 
     let obj = getParamsToObj()
@@ -90,15 +96,14 @@ $('#galleryBtn').on('click', () => {
 
 // 用相机拍照
 $('#cameraBtn').on('click', () => {
+  alert(`filterId:${baseConfig.filterId}-categoryId:${baseConfig.categoryId}-stickerId:${baseConfig.stickerId}`)
   if (appState.isInApp) {
     const param = new EventCameraParam(
             EventCameraParam.types.imageCamera, // 字符串 imageCamera: 相机  imageAlbum： 相册
             EventCameraParam.cameraPositions.front, // 前置摄像头 0  后置摄像头: 1
-            '', // 滤镜id
-            '', // 分栏id (贴纸是在分栏里面的 所以app一般找贴纸先找到贴纸所在的分栏)
-            '', // 贴纸id
-            '2', // 貌似是 音乐id
-            'true'  // 已设置默认为true
+            baseConfig.filterId, // 滤镜id
+            baseConfig.categoryId, // 分栏id (贴纸是在分栏里面的 所以app一般找贴纸先找到贴纸所在的分栏)
+            baseConfig.stickerId // 贴纸id
     );
     BridgeFactory.getBridge().eventCamera(param, eventCameraCallback);
   } else {
