@@ -3,6 +3,8 @@
 [testUrl](https://zhaodifont.github.io/kajicam/bridge.html)
 
 ### jsBridge
+
+* 区分ios、android
 ```
 // @/js/bridge/BridgeFactory.js
 
@@ -26,7 +28,7 @@ const Bridge = BridgeFactory.getBridge()
 export default Bridge
 
 ```
-
+* 引入jsbridge
 ```
 // main.js
 import Bridge from '@/js/bridge/BridgeFactory'
@@ -50,16 +52,16 @@ Bridge.[调用指定功能]
   // 当然 这个场景只会只会出现在ios中
 ```
 > android在App的beta、real两种环境引入的jsbridge没有不同
+>
 > ios不同的环境在_calliOSFunction方法中设置不同的scheme
 
 ### appInfo
 
-> 查询app信息功能 （6.5.3） 返回的信息带duid（7.10.1）
-
+* 查询app信息 6.5.3
 
 ```
 bridgeFactory.getBridge().appInfo(res => {
-      // res : {app: '7.3.1', 'os': '23', 'deviceModel': 'CAM-TL00', 'language': 'zh-CN', 'country': 'CN'}
+      // res : {app, os, deviceModel, language, country, duid(7.10.1)}
       if (res.app) {
         isInApp = true
       }
@@ -72,72 +74,44 @@ bridgeFactory.getBridge().appInfo(res => {
 
 ### save
 
-> 保存图片功能  (6.7.0)
->
+* 保存图片 6.7.0
 
 ```
-import SaveShareParam from "@/common/bridge/param/SaveShareParam";
+import SaveShareParam from "@/common/bridge/param/SaveShareParam"
 
-export function handleSave(){
-  const param = new SaveShareParam($('#distImg')[0].src, SaveShareParam.types.image);
-  let stat = false; //  初始一个变量 这次未统计
-  bridgeFactory.getBridge().save(param, result => {
-     // 保存成功
-  });
-}
+$('#saveBtn').on('click', () => {
+  if ($('#distImg').attr('src').length == 0) {
+    alert('plz select media')
+  } else {
+    const param = new SaveShareParam({
+      url: $('#distImg').attr('src'),
+      type: SaveShareParam.types.image
+    })
+    Bridge.save(param, () => {
+      alert('save success')
+    })
+  }
+})
 ```
-
->  使用频率较低  注意和 shareWidthCallback的区别
->
 
 ### shareWithCallback
 
-> save的进化版 保存+分享  （6.5.3）
->
-> 分享面板弹出一次的过程中 弹出和关闭都会触发此函数的回调函数
+* 保存 + 分享 6.5.3  shareWebPage 6.7.0 shareVideo 8.0.0
 
 ```
-/**
-  * 将页面中的图片或视频 保存到用户的手机终端 并触发分享
-  * @param saveShareParam (@see ./param/SaveShareParam)
-  * @param sharePoppedCallback - app中分享面板弹出时触发 (关闭面板时可能会再次触发) callback
-  * @param shareMediaClickedCallback - app选择分享媒介时触发 callback (现阶段无效 ??)
-*/
-    shareWithCallback(saveShareParam, sharePoppedCallback, shareMediaClickedCallback) {
-        const sharePoppedCallbackName = this._registerCallback('sharePoppedCallback', sharePoppedCallback, AppCommonResult);
-        const shareMediaClickedCallbackName = this._registerCallback('shareMediaClickedCallback', shareMediaClickedCallback, AppCommonResult);
-        const options = JSON.parse(saveShareParam.toString());
-        options.clickShareButton = shareMediaClickedCallbackName;
-
-        this._calliOSFunction("share", options, sharePoppedCallbackName);
-    }
-```
-
-```
-import SaveShareParam from "@/common/bridge/param/SaveShareParam";
-
-export function handleSaveShare(){
-  // case1: 分享图片
-  const param = new SaveShareParam($('#distImg')[0].src, SaveShareParam.types.image);
-  // case2: 分享视频
-  // const params = new SaveShareParam('https://b612-static.kajicam.com/stickerpr/1391/file_media_1_1545207714759.mp4',SaveShareParam.types.video);
-  // case3: 分享链接 (8.0.0新增功能)
-  // let title="title ==一起来玩最爱的B612咔叽，随手一排就是小仙女～";
-  // let content="content ==一起来玩最爱的B612咔叽，随手一排就是小仙女～";
-  // let url='http://www.baidu.com';
-  // let thumbnail='https://f12.baidu.com/it/u=645678572,3652301717&fm=76' // 图片不能太大
-  // let params = new SaveShareParam('https://b612-static.kajicam.com/stickerpr/1388/file_media_1_1545210560520.jpg',SaveShareParam.types.image);
-
-  let stat = false; //  初始一个变量 这次未统计
-  bridgeFactory.getBridge().shareWithCallback(param, result => {
-    if(!stat){ //  分享的时候 呼起和点击分享面板都会触发 这样能做到精确统计一次
-      showToast('保存成功')
-      iosState = !iosState
-      // 统计一次 _hmt.push(['_trackEvent', eventCategory+ inState, 'Btn', '保存分享' + _years[yearAct].imgTial[_styleAct]])
-    }
-  }, res => {
+$('#shareVideo').on('click', () => {
+  let params = new SaveShareParam({
+    url: 'https://b612-static.kajicam.com/stickerpr/1391/file_media_1_1545207714759.mp4',
+    type: SaveShareParam.types.video
   });
-}
+  var iosShared = false //分享面板弹出一次的过程中 弹出和关闭都会触发此函数的回调函数
+  Bridge.shareWithCallback(params, result => {
+    if (!iosShared){
+      iosShared = !iosShared
+      alert('video has been saved, plz choose to share from album')
+    }
+  }, res => {})
+})
 ```
 
 ### eventCamera & eventCameraWithLandmarks
