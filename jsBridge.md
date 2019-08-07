@@ -1,18 +1,8 @@
 ## jsBridge 文档
 
-[Demo地址](https://zhaodifont.github.io/kajicam/bridge.html)
+[testUrl](https://zhaodifont.github.io/kajicam/bridge.html)
 
-### jsBridge的引入
-
-```
-// main.js
-import BridgeFactory from '@/js/bridge/BridgeFactory'
-
-let isInApp = false
-BridgeFactory.getBridge().[调用指定功能]
-
-```
-=>
+### jsBridge
 ```
 // @/js/bridge/BridgeFactory.js
 
@@ -32,15 +22,23 @@ export default class BridgeFactory {
         }
     }
 }
+const Bridge = BridgeFactory.getBridge()
+export default Bridge
 
 ```
 
-> android中 betaApp和realApp最终引用的jsbridge可以是同一份文件（AndroidBridge.js）
->
-> ios中 betaApp和realApp引用的jsbridge 只有一处区别 (IosBridge.js中的 _calliOSFunction 函数中) :
+```
+// main.js
+import Bridge from '@/js/bridge/BridgeFactory'
+
+let isInApp = false //初始默认app外
+Bridge.[调用指定功能]
 
 ```
-// IosBridge.js
+
+
+```
+// IosBridge.js 呼起App功能
 
  _calliOSFunction(functionName, args, sCallback) {
     let url = scheme + "native/"
@@ -51,15 +49,15 @@ export default class BridgeFactory {
   // 如果scheme设置错误 出现的场景是 在betaApp跳至realApp 或反之
   // 当然 这个场景只会只会出现在ios中
 ```
+> android在App的beta、real两种环境引入的jsbridge没有不同
+> ios不同的环境在_calliOSFunction方法中设置不同的scheme
 
 ### appInfo
 
 > 查询app信息功能 （6.5.3） 返回的信息带duid（7.10.1）
->
-> 可以用appInfo方法的回调来判断是否在app内
+
 
 ```
-let isInApp = false
 bridgeFactory.getBridge().appInfo(res => {
       // res : {app: '7.3.1', 'os': '23', 'deviceModel': 'CAM-TL00', 'language': 'zh-CN', 'country': 'CN'}
       if (res.app) {
@@ -68,6 +66,9 @@ bridgeFactory.getBridge().appInfo(res => {
     })
   // 注 返回的res信息属于异步返回的数据 如果同步的代码中需要使用此信息会失误
 ```
+> 只有在app内部，回调才会执行，改变isInApp状态
+>
+> 返回的res信息属于异步返回的数据 如果同步的代码中需要使用此信息会失误
 
 ### save
 
