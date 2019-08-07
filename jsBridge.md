@@ -60,7 +60,7 @@ Bridge.[调用指定功能]
 * 查询app信息 6.5.3
 
 ```
-bridgeFactory.getBridge().appInfo(res => {
+Bridge.appInfo(res => {
       // res : {app, os, deviceModel, language, country, duid(7.10.1)}
       if (res.app) {
         isInApp = true
