@@ -1,14 +1,17 @@
-import AbstractBridge from "./AbstractBridge";
+import AbstractBridge from "./AbstractBridge"
 import ConfigFactory from "@/config/index"
-import AppInfo from "./model/AppInfo";
-import AppCommonResult from "./model/AppCommonResult";
-import CameraResult from "./model/CameraResult";
+import AppInfo from "./model/AppInfo"
+import UserInfo from "./model/UserInfo"
+import AppCommonResult from "./model/AppCommonResult"
+import CameraResult from "./model/CameraResult"
+import VideoResult from "./model/VideoResult"
+import BrowserChecker from "../util/BrowserChecker"
 
 let instance = null;
 
 export default class IosBridge extends AbstractBridge {
     constructor() {
-        super();
+        super()
         if (!instance) {
             instance = this;
             super._initInstance(instance);
@@ -17,17 +20,19 @@ export default class IosBridge extends AbstractBridge {
     }
 
     /**
-     * app 정보 요청 (정확히 어떤 정보 ?)
-     * @param userCallback
-     *    : callback param 0 - ./model/AppInfo
-     */
+    * app 内通过回调获取基本信息 6.5.3
+    * callBack返回 {app, os, deviceModel, language, country, duid(7.10.1)}
+    * @param userCallback
+    *    : callback param 0 - ./model/AppInfo
+    */
     appInfo(userCallback) {
         const callbackMethodFullName = this._registerCallback("appInfo", userCallback, AppInfo);
         this._calliOSFunction("appInfo", null, callbackMethodFullName);
     }
 
     /**
-     * 앱에게 이미지 또는 비디오를 전달하여 단말에 저장을 요청한다.
+     * 保存媒体成功 6.7.0
+     * 调用成功后才执行callback
      * @param saveShareParam (@see ./param/SaveShareParam)
      * @param userCallback
      */
@@ -37,11 +42,13 @@ export default class IosBridge extends AbstractBridge {
     }
 
     /**
-     * 앱에게 이미지 또는 비디오를 전달하여 공유를 요청한다.
-     * @param saveShareParam (@see ./param/SaveShareParam)
-     * @param sharePoppedCallback - app에서 공유 div를 보여준 후 호출되는 callback
-     * @param shareMediaClickedCallback - app에서 share 매체를 선택한 후 callback (호출되지 않는데 ??)
-     */
+    * 分享并保存媒体 6.7.0
+    * 调用成功后才执行callback
+    * 支持标题、内容、图标、链接 8.0.0
+    * @param saveShareParam (@see ./param/SaveShareParam)
+    * @param sharePoppedCallback - app에서 공유 div를 보여준 후 호출되는 callback
+    * @param shareMediaClickedCallback - app에서 share 매체를 선택한 후 callback (호출되지 않는데 ??)
+    */
     shareWithCallback(saveShareParam, sharePoppedCallback, shareMediaClickedCallback) {
         const sharePoppedCallbackName = this._registerCallback('sharePoppedCallback', sharePoppedCallback, AppCommonResult);
         const shareMediaClickedCallbackName = this._registerCallback('shareMediaClickedCallback', shareMediaClickedCallback, AppCommonResult);
@@ -53,57 +60,122 @@ export default class IosBridge extends AbstractBridge {
     }
 
     /**
-     * 앱으로 camera 나 gallery 호출을 요청한다.
+    * 从相册或拍照选取照片 6.5.0
+    * 调用成功后callback(object, type) object:{ base64Image:...., landmarks: ....} type:imageCamera or imageAlbum
      * @param eventCameraParam (@see ./param/EventCameraParam)
      * @param userCallback
      */
     eventCamera(eventCameraParam, userCallback) {
         const callbackMethodFullName = this._registerCallback("eventCamera", userCallback,
-            CameraResult, eventCameraParam.type, eventCameraParam.cameraPosition);
+            CameraResult, eventCameraParam.type, eventCameraParam.cameraPosition)
 
-        this._calliOSFunction("eventCamera", eventCameraParam, callbackMethodFullName);
+        this._calliOSFunction("eventCamera", eventCameraParam, callbackMethodFullName)
     }
-
+    /*
+      带有landmarks的eventCamera 7.6.0支持
+    */
     eventCameraWithLandmarks(eventCameraParam, userCallback) {
-        const callbackMethodFullName = this._registerCallback("eventCameraWithLandmarks", userCallback,
-            CameraResult, eventCameraParam.type, eventCameraParam.cameraPosition);
+      if (BrowserChecker.appVersionLessThan([7, 6, 0])){
+        console.log('eventCameraWithLandmarks 7.6.0支持')
+      }
+      const callbackMethodFullName = this._registerCallback("eventCameraWithLandmarks", userCallback,
+          CameraResult, eventCameraParam.type, eventCameraParam.cameraPosition)
 
-        this._calliOSFunction("eventCameraWithLandmarks", eventCameraParam, callbackMethodFullName);
+      this._calliOSFunction("eventCameraWithLandmarks", eventCameraParam, callbackMethodFullName)
     }
 
     /**
-     * 마지막으로 촬영한 사진을 가져온다.
-     * @param userCallback
-     */
+    * 6.5.3
+    *  把进入页面前拍摄的照片带入h5页面，一般是通过confirmbanner配置的h5进入才可获取
+    * @param userCallback
+    */
     getCameraImage(userCallback) {
         const callbackMethodFullName = this._registerCallback("getCameraImage", userCallback, CameraResult);
         this._calliOSFunction("getCameraImage", null, callbackMethodFullName);
     }
-
+    /**
+    * 7.6.0
+    * 带有getCameraImage的getCameraImage
+    */
     getCameraImageWithLandmarks(userCallback) {
         const callbackMethodFullName = this._registerCallback("getCameraImageWithLandmarks", userCallback, CameraResult);
         this._calliOSFunction("getCameraImageWithLandmarks", null, callbackMethodFullName);
     }
 
+    /*
+    关闭当前h5所在的webview 6.5.3支持
+    */
     close() {
-        // const callbackMethodFullName = this._registerCallback("getCameraImageWithLandmarks", userCallback, CameraResult);
-        this._calliOSFunction("close", null, null);
+      if (BrowserChecker.appVersionLessThan([6, 5, 3])){
+        console.log('关闭当前h5所在的webview 6.5.3支持')
+      }
+      this._calliOSFunction("close", null, null);
     }
-
+    /*
+   隐藏title区域 7.10.1支持 调用默认为关闭功能
+    */
     titleBarVisible(isVisible = false) {
       if (BrowserChecker.appVersionLessThan([7, 10, 1])){
-        alert('this version is not support this method')
-        return
+        console.log('隐藏title区域 7.10.1支持')
       }
       this._calliOSFunction("titleBarVisible", {"isVisible":isVisible});
     }
+    /*
+    8.7.0
+    userSeq(Unique key), isMobileVerified(手机认证信息),
+    userId(是否登陆),
+    userM 手机hash值
+    userSeq(Unique key), isMobileVerified(手机认证信息),
+    userId(是否登陆)
+    等所有用户信息通过Json传
+    */
+    getUserSession(userCallback){
+      const callbackMethodFullName = this._registerCallback("getUserSession", userCallback, UserInfo);
+      this._calliOSFunction("getUserSession", null, callbackMethodFullName);
+    }
+    /*
+    8.7.0
+    */
+    loginWithSession(userCallback){
+      const callbackMethodFullName = this._registerCallback("loginWithSession", userCallback, UserInfo);
+      this._calliOSFunction("loginWithSession", null, callbackMethodFullName);
+    }
+    /*
+    8.7.0
+    */
+    verifyPhoneWithSession(userCallback){
+      const callbackMethodFullName = this._registerCallback("verifyPhoneWithSession", userCallback, UserInfo);
+      this._calliOSFunction("verifyPhoneWithSession", null, callbackMethodFullName);
+    }
     /**
-     * ios app과 연동하기 위한 method
-     * (app scheme을 통해 연동)
+     * @param VideoResultParam (@see ./param/VideoResultParam)
+     * @param userCallback
+     */
+     /*
+     8.7.0
+     VideoParam:  @/param/VideoParam
+     */
+    selectVideoAndUpload(VideoParam, userCallback){
+      // _registerCallback 注册回调
+      const callbackMethodFullName = this._registerCallback("selectVideoAndUpload", userCallback, VideoResult)
+      console.log(callbackMethodFullName, callbackMethodFullName);
+      this._calliOSFunction("selectVideoAndUpload", VideoParam, callbackMethodFullName)
+    }
+    /*
+    8.7.0
+    */
+    takeVideoAndUpload(options, userCallback){
+      const callbackMethodFullName = this._registerCallback("takeVideoAndUpload", userCallback, VideoResult)
+      this._calliOSFunction("takeVideoAndUpload", options, callbackMethodFullName);
+    }
+
+    /**
+     * ios app启动方法 method
+     * (app scheme)
      *
-     * @param functionName - app과 정의된 function name
-     * @param args - 전달할 argument object
-     * @param sCallback - app에서 호출해줄 callback 명
+     * @param functionName - app启动的function name
+     * @param args - 转达的 argument object
+     * @param sCallback - app 返回的 callback
      * @private
      */
     _calliOSFunction(functionName, args, sCallback) {
@@ -117,7 +189,6 @@ export default class IosBridge extends AbstractBridge {
             callInfo.args = args;
         }
         url += JSON.stringify(callInfo);
-
         this._openCustomURLinIFrame(url);
     }
 
@@ -129,5 +200,4 @@ export default class IosBridge extends AbstractBridge {
         rootElm.appendChild(newFrameElm);
         newFrameElm.parentNode.removeChild(newFrameElm);
     }
-
 }

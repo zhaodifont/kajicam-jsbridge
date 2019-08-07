@@ -14,11 +14,17 @@ export default class AbstractBridge {
      * @private
      */
     _initInstance() {
-        this.className = this.constructor.name;
-        this.fullName = bridgeContext.getB612NativeContext().namespace + '.' + this.className;
-        this.callback = {};
-        this.callback.fullName = this.fullName + '.callback';
-        this._registerGlobal();
+      this.className = this.constructor.name//IosBridge
+      this.fullName = bridgeContext.getB612NativeContext().namespace + '.' + this.className//B612.native.IosBridge
+      this.callback = {};
+      this.callback.fullName = this.fullName + '.callback'//B612.native.IosBridge.callback
+      this._registerGlobal()
+      /*
+      this.callback =
+      {
+        fullName: B612.native.IosBridge.callback
+      }
+      */
     }
 
     /**
@@ -27,25 +33,58 @@ export default class AbstractBridge {
      * @private
      */
     _registerGlobal() {
-        bridgeContext.getB612NativeContext()[this.className] = bridgeContext.getB612NativeContext()[this.className] || this;
+      // window['B612']['Native'].namespace = B612.Native
+      // window['B612']['Native']['IosBridge'] = window['B612']['Native']['IosBridge'] || this
+      bridgeContext.getB612NativeContext()[this.className] = bridgeContext.getB612NativeContext()[this.className] || this;
+      /*
+        window.B612.Native.IosBridge = this
+        window.B612.Native.IosBridge = {
+          className: 'IosBridge',
+          fullName: 'B612.native.IosBridge',
+          callBack: {
+            fullName: B612.native.IosBridge.callback
+          }
+        }
+      */
     }
 
     /**
-     * 전달된 이름의 callback을 등록하고 callback 함수의 full 명칭을 리턴한다.
-     * @param callbackName : callback 함수 이름
-     * @param userCallback : client code에서 지정한 callback 함수
+     * 登记上传到对方名下的callback，重命名callback函数的full
+     * @param callbackName : callback 回调的方法名
+     * @param userCallback : client code指定的callback函数
      * @param resultType : bridge 호출 결과를 변환할 오브젝트 type을 지정하면 해당 type의 .from() 메소드를 호출해 변환한다.
-     * @param additionalParams : userCallback 함수에 추가적으로 전달할 파라미터
-     * @returns {string} : callback 함수의 full 명칭
+     * @param additionalParams : userCallback 额外参数
+     * @returns {string} : callback 返回函数的全称
      * @private
      */
     _registerCallback(callbackName, userCallback, resultType, ...additionalParams) {
-        this.callback[callbackName] = (result) => {
-            this._logResult(result, callbackName);
-            let resultParsed = resultType ? resultType.from(result) : result;
-            userCallback.apply(undefined, [resultParsed, ...additionalParams]);
-        };
-        return this._makeNativeCallbackName(callbackName);
+      // B612.native.IosBridge.callback.appInfo =
+      this.callback[callbackName] = (result) => {
+          this._logResult(result, callbackName)
+          let resultParsed = resultType ? resultType.from(result) : result//{app, os, deviceModel, language, country}
+          userCallback.apply(undefined, [resultParsed, ...additionalParams]);
+      }
+      /*
+      this.callback =
+      {
+        appInfo: (result) => {
+
+        }
+      }
+      ==>
+      window.B612.Native.IosBridge = this
+      window.B612.Native.IosBridge = {
+        className: 'IosBridge',
+        fullName: 'B612.native.IosBridge',
+        callBack: {
+          fullName: B612.native.IosBridge.callback,
+          appInfo: (result) => {
+
+          }
+        }
+      }
+      */
+      return this._makeNativeCallbackName(callbackName)//B612.native.IosBridge.callback.appInfo
     }
 
     /**
@@ -55,7 +94,8 @@ export default class AbstractBridge {
      * @private
      */
     _makeNativeCallbackName(methodName) {
-        return this.callback.fullName + '.' + methodName;
+      // B612.native.IosBridge.callback.appInfo
+      return this.callback.fullName + '.' + methodName;
     }
 
     /**

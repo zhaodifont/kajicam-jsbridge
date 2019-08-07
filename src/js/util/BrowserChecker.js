@@ -8,7 +8,6 @@ export default class BrowserChecker {
     }
 
     static isIosOrAndroid() {
-        console.log('[navigation.userAgent] : ' + navigator.userAgent);
         return BrowserChecker.isIos() || BrowserChecker.isAndroid();
     }
 
@@ -18,7 +17,7 @@ export default class BrowserChecker {
             const majorVersion = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/)[1];
             result = majorVersion <= 10;
         }
-        return result;
+        return result
     }
 
     static isIos8or9() {

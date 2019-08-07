@@ -7,9 +7,9 @@ export default class BridgeParam {
      * @returns {string}
      */
     toString(clearEmpty) {
-        if(clearEmpty) {
+        if (clearEmpty) {
             return JSON.stringify(this, (key, value) => {
-                if(!value) {
+                if (!value) {
                     return undefined;
                 } else {
                     return value;

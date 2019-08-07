@@ -51,22 +51,22 @@
 !function(e,t){var n=e.documentElement,i="orientationchange"in window?"orientationchange":"resize",d=(/iPad|iPhone|iPod/.test(navigator.userAgent)&&!window.MSStream,function(){var t=n.clientWidth;t&&(t>=750?(t=750,e.body.style.width="750px"):e.body.style.width=t+"px",n.style.fontSize=100*(t/750)+"px",n.dataset.width=t,n.dataset.percent=100*(t/750))});d(),e.documentElement.classList.add("iosx"+t.devicePixelRatio),e.addEventListener&&t.addEventListener(i,d,!1)}(document,window)
 </script>
 <div id="app">
-  <h4>Base State:</h4>
+  <h4>Base State</h4>
   <div class="baseState">
     ...
   </div>
-  <h4>AppInfo:</h4>
+  <h4>AppInfo</h4>
   <div class="AppInfo">
     ...
   </div>
-  <div class="appControl" style="display:none;">
-    <h4>App Control:</h4>
-    <button type="button" class="titleBarVisible" name="button">titleBarVisible</button>
+  <div class="appControl">
+    <h4>App Control</h4>
+    <button type="button" id="titleBarVisible" name="button">titleBarVisible</button>
     <button type="button" class="exit" name="button">Exit</button>
   </div>
 
 
-  <h4>eventCamera & eventCameraWithLandmarks:</h4>
+  <h4>EventCamera</h4>
   <!-- trigger the inputfile event if it is outside app -->
   <input type="file" id="inputfile" accept="image/*" style="position:absolute;left:-999rem" />
   <div class="eventCamera">
@@ -74,23 +74,37 @@
       <var class="landmarks"></var>
       <img src="" width="100%" id="distImg" alt="">
     </div>
-    <button type="button" id="galleryBtn" name="button">selectFromAlbum</button>
-    <button type="button" id="cameraBtn" name="button">selectFromCamera</button>
-    <button type="button" id="saveBtn" name="button" style="display:none">saveImage</button>
-    <button type="button" id="eventCameraWithLandmarksBtn" name="button" style="display:none;">eventCameraWithLandmarks</button>
+    <button type="button" id="eventCamera_imageCamera" name="button">eventCamera(imageCamera)</button>
+    <button type="button" id="eventCamera_imageAlbum" name="button">eventCamera(imageAlbum)</button>
+    <button type="button" id="eventCameraWithLandmarks" name="button">eventCameraWithLandmarks</button>
+    <button type="button" id="eventCameraWithLandmarks_imageAlbum" name="button">eventCameraWithLandmarks imageAlbum</button>
   </div>
-
-  <h4>UUID (设备唯一id)</h4>
-  <a href="" id="getUUid" style="display:none;">get uuid</a> <span class="getUUidVal">...</span>
-  <br />
-  <br />
-  <div class="shareDom" style="display:none">
-    <h4>Share</h4>
+  <h4>Save and Share</h4>
+  <div>
+    <button type="button" id="saveBtn" name="button">saveImage</button>
     <button type="button" id="shareVideo" name="button">shareVideo</button>
     <button type="button" id="sharePage" name="button">sharePage</button>
-    <button type="button" id="shareImage" name="button">shareImage</button>
+    <button type="button" id="shareImage" name="button">saveAndshareImage</button>
   </div>
+  <h4>Video Upload</h4>
+  <div  style="padding-top:5px">
+    <video id="distVideo" width="100%" preload="auto" webkit-playsinline="" playsinline="" x5-playsinline="" x-webkit-airplay="allow"></video><br />
+    <button type="button" id="selectVideoAndUpload" name="button">selectVideoAndUpload</button>
+    <button type="button" id="takeVideoAndUpload" name="button">takeVideoAndUpload</button>
+  </div>
+  <h4>UUID (设备唯一id)</h4>
+  <a href="javascript:void(0)" id="getUUid">get uuid</a> <span class="getUUidVal">...</span>
+  <br />
+  <br />
 
+  <h4>User Session Control</h4>
+  <div class="">
+    <div class="userSession"></div>
+    <button type="button" id="getUserSession" name="button">getUserSession</button>
+    <!-- <div class="userSession"></div> -->
+    <button type="button" id="loginWithSession" name="button">loginWithSession</button>
+    <button type="button" id="verifyPhoneWithSession" name="button">verifyPhoneWithSession</button>
+  </div>
 
 </div>
 <div class="log">

@@ -3,8 +3,7 @@ import NullBridge from "./NullBridge";
 import AndroidBridge from "./AndroidBridge";
 import IosBridge from "./IosBridge";
 
-
-export default class BridgeFactory {
+class BridgeFactory {
     static getBridge() {
         if (BrowserChecker.isIos()) {
             return new IosBridge();
@@ -17,3 +16,5 @@ export default class BridgeFactory {
         }
     }
 }
+const Bridge = BridgeFactory.getBridge()
+export default Bridge

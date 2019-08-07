@@ -7,17 +7,17 @@ const types = {
 };
 
 export default class SaveShareParam extends BridgeParam {
-    constructor(url = '', type = 'image', title = '', content = '', thumbnail = '') {
-        super();
-        if (!types[type]) throw `[illegal type] ${type}`;
-        this.url = url;
-        this.type = type;
-        this.title = title;
-        this.content = content;
+    constructor({url = '', type = 'image', title = '', content = '', thumbnail = ''}) {
+        super()
+        if (!types[type]) throw `[illegal type] ${type}`
+        this.url = url
+        this.type = type
+        this.title = title
+        this.content = content
         this.thumbnail = thumbnail
     }
 
     static get types() {
-        return types;
+        return types
     }
 }

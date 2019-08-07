@@ -2,7 +2,7 @@ module.exports = {
   assetsPublicPath: './',
   assetsRoot: '../dist/local/',
   b612Scheme: 'b612cnb://',
-  sitePrefix: 'http://h5-beta.kajicam.com/events',// 拼接打开app并在其中启动link的前缀 短点好 服务器地址 每次不用再改
+  sitePrefix: 'http://h5-beta.kajicam.com/events', // 拼接打开app并在其中启动link的前缀 短点好 服务器地址 每次不用再改
   uploadUrl: "http://qa-b612-fs.snowcam.cn/v1/event/vision/travel/upload-only",
   imgProcess:'http://qa-b612-fs.snowcam.cn/v1/event/vision/travel',
   imagePrefix: "https://qa-b612.snowcam.cn/owfs/",

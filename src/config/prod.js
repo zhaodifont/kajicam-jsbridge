@@ -9,5 +9,5 @@ module.exports = {
   imagePrefix: "https://b612kaji-org.oss-cn-beijing.aliyuncs.com/",
   filterId: "235",
   categoryId: "20005",
-  stickerId: "301197",
+  stickerId: "301197"
 }
