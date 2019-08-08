@@ -72,6 +72,7 @@ Bridge.appInfo(res => {
 ### save
 
 * 保存图片 6.7.0
+
 ```
 import SaveShareParam from "@/common/bridge/param/SaveShareParam"
 
@@ -150,8 +151,7 @@ function eventCameraCallback(res, type){
 
 ###  getCameraImage
 
-> 拍摄照片后出现confirmbanner， 点击后进入h5并获取之前拍摄的照片 (6.5.3)
->
+* 拍摄照片后出现confirmbanner， 点击后进入h5并获取之前拍摄的照片 (6.5.3)
 
 ```
 /**
