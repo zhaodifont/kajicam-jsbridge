@@ -77,19 +77,13 @@ Bridge.appInfo(res => {
 ```
 import SaveShareParam from "@/common/bridge/param/SaveShareParam"
 
-$('#saveBtn').on('click', () => {
-  if ($('#distImg').attr('src').length == 0) {
-    alert('plz select media')
-  } else {
-    const param = new SaveShareParam({
-      url: $('#distImg').attr('src'),
-      type: SaveShareParam.types.image
-    })
-    Bridge.save(param, () => {
-      alert('save success')
-    })
-  }
-})
+  const param = new SaveShareParam({
+    url: base64Image,
+    type: SaveShareParam.types.image
+  })
+  Bridge.save(param, () => {
+    alert('save success')
+  })
 ```
 
 ### shareWithCallback
@@ -97,7 +91,6 @@ $('#saveBtn').on('click', () => {
 * 保存 + 分享 shareImage 6.5.3  shareWebPage 6.7.0 shareVideo 8.0.0
 
 ```
-$('#shareVideo').on('click', () => {
   let params = new SaveShareParam({
     url: 'https://b612-static.kajicam.com/stickerpr/1391/file_media_1_1545207714759.mp4',
     type: SaveShareParam.types.video
@@ -108,8 +101,7 @@ $('#shareVideo').on('click', () => {
       iosShared = !iosShared
       alert('video has been saved, plz choose to share from album')
     }
-  }, res => {})
-})
+  })
 ```
 
 ### eventCamera & eventCameraWithLandmarks
@@ -120,53 +112,34 @@ $('#shareVideo').on('click', () => {
 import EventCameraParam from "@/common/bridge/param/EventCameraParam";
 
 // 从相册选取
-$('#eventCamera_imageAlbum').on('click', () => {
-  if (appState.isInApp) {
 
-    const param = new EventCameraParam({
-            type:EventCameraParam.types.imageAlbum //字符串 imageCamera: 相机  imageAlbum： 相册
-    })
-    Bridge.eventCamera(param, eventCameraCallback);
-  } else {
-    $('#inputfile').trigger('click')
-  }
-})
+  const param = new EventCameraParam({
+          type:EventCameraParam.types.imageAlbum //字符串 imageCamera: 相机  imageAlbum： 相册
+  })
+  Bridge.eventCamera(param, eventCameraCallback);
 
 // 用相机拍照
-$('#eventCamera_imageCamera').on('click', () => {
-  if (appState.isInApp) {
-    const param = new EventCameraParam({
-            type: EventCameraParam.types.imageCamera, // 字符串 imageCamera: 相机  imageAlbum： 相册
-            cameraPosition: EventCameraParam.cameraPositions.front, //前置摄像头 0  后置摄像头: 1
-            filterId: baseConfig.filterId, // 滤镜id
-            categoryId: baseConfig.categoryId, // 分栏id (贴纸是在分栏里面的 所以app一般找贴纸先找到贴纸所在的分栏)
-            stickerId: baseConfig.stickerId // 贴纸id
-    })
-    Bridge.eventCamera(param, eventCameraCallback);
-  } else {
-    $('#inputfile').trigger('click')
-  }
-})
-
+  const param = new EventCameraParam({
+          type: EventCameraParam.types.imageCamera, // 字符串 imageCamera: 相机  imageAlbum： 相册
+          cameraPosition: EventCameraParam.cameraPositions.front, //前置摄像头 0  后置摄像头: 1
+          filterId: baseConfig.filterId, // 滤镜id
+          categoryId: baseConfig.categoryId, // 分栏id (贴纸是在分栏里面的 所以app一般找贴纸先找到贴纸所在的分栏)
+          stickerId: baseConfig.stickerId // 贴纸id
+  })
+  Bridge.eventCamera(param, eventCameraCallback);
 ```
 > eventCameraWithLandmarks 在  eventCamera的基础上返回带有landmarks
 ```
 
 // 用相机拍照
-$('#eventCameraWithLandmarks').on('click', () => {
-  if (appState.isInApp) {
-    const param = new EventCameraParam({
-            type: EventCameraParam.types.imageCamera, // 字符串 imageCamera: 相机  imageAlbum： 相册
-            cameraPositions: EventCameraParam.cameraPositions.front, // 前置摄像头 0  后置摄像头: 1
-            filterId: baseConfig.filterId, // 滤镜id
-            categoryId: baseConfig.categoryId, // 分栏id (贴纸是在分栏里面的 所以app一般找贴纸先找到贴纸所在的分栏)
-            stickerId: baseConfig.stickerId
-    })
-    Bridge.eventCameraWithLandmarks(param, eventCameraCallback);
-  } else {
-    $('#inputfile').trigger('click')
-  }
-})
+  const param = new EventCameraParam({
+          type: EventCameraParam.types.imageCamera, // 字符串 imageCamera: 相机  imageAlbum： 相册
+          cameraPositions: EventCameraParam.cameraPositions.front, // 前置摄像头 0  后置摄像头: 1
+          filterId: baseConfig.filterId, // 滤镜id
+          categoryId: baseConfig.categoryId, // 分栏id (贴纸是在分栏里面的 所以app一般找贴纸先找到贴纸所在的分栏)
+          stickerId: baseConfig.stickerId
+  })
+  Bridge.eventCameraWithLandmarks(param, eventCameraCallback);
 
 function eventCameraCallback(res, type){
  if (!!res.success == true) {
@@ -194,15 +167,13 @@ function eventCameraCallback(res, type){
 
 ```
 // ios中需要先登录才能上传成功
-$('#selectVideoAndUpload').on('click', () => {
   let params = new VideoParam()
   Bridge.selectVideoAndUpload(params, res => {
     //{success: Boolean, videoPath: String}
    if (!res.success) return//失败
   })
-})
+  
 // ios中需要先登录才能上传成功
-$('#takeVideoAndUpload').on('click', () => {
   let params = new EventCameraParam({
     type: EventCameraParam.types.videoCamera,
     filterId: baseConfig.filterId, // 滤镜id
@@ -212,7 +183,6 @@ $('#takeVideoAndUpload').on('click', () => {
   Bridge.takeVideoAndUpload(params, res => {
    if (!res.success) return
   })
-})
 ```
 
 ### user session
