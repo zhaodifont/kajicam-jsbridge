@@ -5,6 +5,7 @@
 ### jsBridge
 
 * 区分ios、android
+
 ```
 // @/js/bridge/BridgeFactory.js
 
@@ -28,6 +29,7 @@ const Bridge = BridgeFactory.getBridge()
 export default Bridge
 
 ```
+
 * 引入jsbridge
 ```
 // main.js
