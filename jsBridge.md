@@ -7,8 +7,8 @@
 ```
 // @/js/bridge/BridgeFactory.js
 
-import AndroidBridge from "./AndroidBridge";
-import IosBridge from "./IosBridge";
+import AndroidBridge from "./AndroidBridge"
+import IosBridge from "./IosBridge"
 
 export default class BridgeFactory {
     static getBridge() {
@@ -29,6 +29,7 @@ export default Bridge
 ```
 
 * 引入jsbridge
+
 ```
 // main.js
 import Bridge from '@/js/bridge/BridgeFactory'
@@ -36,10 +37,6 @@ import Bridge from '@/js/bridge/BridgeFactory'
 let isInApp = false //初始默认app外
 Bridge.[调用指定功能]
 
-```
-
-
-```
 // IosBridge.js 呼起App功能
 
  _calliOSFunction(functionName, args, sCallback) {
@@ -58,6 +55,7 @@ Bridge.[调用指定功能]
 ### appInfo 
 
 * 查询app信息 6.5.3
+
 ```
 Bridge.appInfo(res => {
       // res : {app, os, deviceModel, language, country, duid(7.10.1)}
