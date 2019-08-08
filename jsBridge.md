@@ -1,18 +1,10 @@
 ## jsBridge 文档
 
-[Demo地址](https://zhaodifont.github.io/kajicam/bridge.html)
+[testUrl](https://zhaodifont.github.io/kajicam/bridge.html)
 
-### jsBridge的引入
+### jsBridge
 
-```
-// main.js
-import BridgeFactory from '@/js/bridge/BridgeFactory'
-
-let isInApp = false
-BridgeFactory.getBridge().[调用指定功能]
-
-```
-=>
+* 区分ios、android
 ```
 // @/js/bridge/BridgeFactory.js
 
@@ -32,15 +24,23 @@ export default class BridgeFactory {
         }
     }
 }
+const Bridge = BridgeFactory.getBridge()
+export default Bridge
+
+```
+* 引入jsbridge
+```
+// main.js
+import Bridge from '@/js/bridge/BridgeFactory'
+
+let isInApp = false //初始默认app外
+Bridge.[调用指定功能]
 
 ```
 
-> android中 betaApp和realApp最终引用的jsbridge可以是同一份文件（AndroidBridge.js）
->
-> ios中 betaApp和realApp引用的jsbridge 只有一处区别 (IosBridge.js中的 _calliOSFunction 函数中) :
 
 ```
-// IosBridge.js
+// IosBridge.js 呼起App功能
 
  _calliOSFunction(functionName, args, sCallback) {
     let url = scheme + "native/"
@@ -51,178 +51,95 @@ export default class BridgeFactory {
   // 如果scheme设置错误 出现的场景是 在betaApp跳至realApp 或反之
   // 当然 这个场景只会只会出现在ios中
 ```
-
-### appInfo
-
-> 查询app信息功能 （6.5.3） 返回的信息带duid（7.10.1）
+> android在App的beta、real两种环境引入的jsbridge没有不同
 >
-> 可以用appInfo方法的回调来判断是否在app内
+> ios不同的环境在_calliOSFunction方法中设置不同的scheme
 
+### appInfo 
+
+* 查询app信息 6.5.3
 ```
-let isInApp = false
-bridgeFactory.getBridge().appInfo(res => {
-      // res : {app: '7.3.1', 'os': '23', 'deviceModel': 'CAM-TL00', 'language': 'zh-CN', 'country': 'CN'}
+Bridge.appInfo(res => {
+      // res : {app, os, deviceModel, language, country, duid(7.10.1)}
       if (res.app) {
         isInApp = true
       }
     })
   // 注 返回的res信息属于异步返回的数据 如果同步的代码中需要使用此信息会失误
 ```
+> 只有在app内部，回调才会执行，改变isInApp状态
+>
+> 返回的res信息属于异步返回的数据 如果同步的代码中需要使用此信息会失误
 
 ### save
 
-> 保存图片功能  (6.7.0)
->
-
+* 保存图片 6.7.0
 ```
-import SaveShareParam from "@/common/bridge/param/SaveShareParam";
+import SaveShareParam from "@/common/bridge/param/SaveShareParam"
 
-export function handleSave(){
-  const param = new SaveShareParam($('#distImg')[0].src, SaveShareParam.types.image);
-  let stat = false; //  初始一个变量 这次未统计
-  bridgeFactory.getBridge().save(param, result => {
-     // 保存成功
-  });
-}
+  const param = new SaveShareParam({
+    url: base64Image,
+    type: SaveShareParam.types.image
+  })
+  Bridge.save(param, () => {
+    alert('save success')
+  })
 ```
-
->  使用频率较低  注意和 shareWidthCallback的区别
->
 
 ### shareWithCallback
 
-> save的进化版 保存+分享  （6.5.3）
->
-> 分享面板弹出一次的过程中 弹出和关闭都会触发此函数的回调函数
+* 保存 + 分享 shareImage 6.5.3  shareWebPage 6.7.0 shareVideo 8.0.0
 
 ```
-/**
-  * 将页面中的图片或视频 保存到用户的手机终端 并触发分享
-  * @param saveShareParam (@see ./param/SaveShareParam)
-  * @param sharePoppedCallback - app中分享面板弹出时触发 (关闭面板时可能会再次触发) callback
-  * @param shareMediaClickedCallback - app选择分享媒介时触发 callback (现阶段无效 ??)
-*/
-    shareWithCallback(saveShareParam, sharePoppedCallback, shareMediaClickedCallback) {
-        const sharePoppedCallbackName = this._registerCallback('sharePoppedCallback', sharePoppedCallback, AppCommonResult);
-        const shareMediaClickedCallbackName = this._registerCallback('shareMediaClickedCallback', shareMediaClickedCallback, AppCommonResult);
-        const options = JSON.parse(saveShareParam.toString());
-        options.clickShareButton = shareMediaClickedCallbackName;
-
-        this._calliOSFunction("share", options, sharePoppedCallbackName);
-    }
-```
-
-```
-import SaveShareParam from "@/common/bridge/param/SaveShareParam";
-
-export function handleSaveShare(){
-  // case1: 分享图片
-  const param = new SaveShareParam($('#distImg')[0].src, SaveShareParam.types.image);
-  // case2: 分享视频
-  // const params = new SaveShareParam('https://b612-static.kajicam.com/stickerpr/1391/file_media_1_1545207714759.mp4',SaveShareParam.types.video);
-  // case3: 分享链接 (8.0.0新增功能)
-  // let title="title ==一起来玩最爱的B612咔叽，随手一排就是小仙女～";
-  // let content="content ==一起来玩最爱的B612咔叽，随手一排就是小仙女～";
-  // let url='http://www.baidu.com';
-  // let thumbnail='https://f12.baidu.com/it/u=645678572,3652301717&fm=76' // 图片不能太大
-  // let params = new SaveShareParam('https://b612-static.kajicam.com/stickerpr/1388/file_media_1_1545210560520.jpg',SaveShareParam.types.image);
-
-  let stat = false; //  初始一个变量 这次未统计
-  bridgeFactory.getBridge().shareWithCallback(param, result => {
-    if(!stat){ //  分享的时候 呼起和点击分享面板都会触发 这样能做到精确统计一次
-      showToast('保存成功')
-      iosState = !iosState
-      // 统计一次 _hmt.push(['_trackEvent', eventCategory+ inState, 'Btn', '保存分享' + _years[yearAct].imgTial[_styleAct]])
-    }
-  }, res => {
+  let params = new SaveShareParam({
+    url: 'https://b612-static.kajicam.com/stickerpr/1391/file_media_1_1545207714759.mp4',
+    type: SaveShareParam.types.video
   });
-}
+  var iosShared = false //分享面板弹出一次的过程中 弹出和关闭都会触发此函数的回调函数
+  Bridge.shareWithCallback(params, result => {
+    if (!iosShared){
+      iosShared = !iosShared
+      alert('video has been saved, plz choose to share from album')
+    }
+  })
 ```
 
 ### eventCamera & eventCameraWithLandmarks
 
-> 调用相机或相册功能 并将拍摄或获取的照片（或人脸坐标）返回给页面  （6.5.0）
->
-
-```
-/**
-  * @param eventCameraParam : (@see ./param/EventCameraParam)
-  * @param userCallback
-*/
-   // ios
-    eventCamera(eventCameraParam, userCallback) {
-        const callbackMethodFullName = this._registerCallback("eventCamera", userCallback,
-            CameraResult, eventCameraParam.type, eventCameraParam.cameraPosition);
-
-        this._calliOSFunction("eventCamera", eventCameraParam, callbackMethodFullName);
-    }
-
-    // eventCameraWithLandmarks 仅兼容app7.6.0以上
-    // 在android中 如果拍照非人脸 则无法触发回调函数 慎用！！
-    // (2018.11.21更新) android 版本7.9.3+ 已修复非人脸无回调bug
-
-    eventCameraWithLandmarks(eventCameraParam, userCallback) {
-        const callbackMethodFullName = this._registerCallback("eventCameraWithLandmarks", userCallback,
-            CameraResult, eventCameraParam.type, eventCameraParam.cameraPosition);
-
-        this._calliOSFunction("eventCameraWithLandmarks", eventCameraParam, callbackMethodFullName);
-    }
-
-
-    // android 中注意 当前版本中 需要把categoryId、stickerId强制设置为undefined 不然调用时会出现卡死闪退的情况
-    // 只使用 filterId即可
-    // eventCameraWithLandmarks同理
-    eventCamera(eventCameraParam, userCallback) {
-        if(BrowserChecker.isAndroid()) {
-            // eventCameraParam.filterId = undefined;
-            eventCameraParam.categoryId = undefined;
-            eventCameraParam.stickerId = undefined;
-        }
-        const callbackMethodFullName = this._registerCallback(
-            "eventCamera", userCallback, EventCameraResult, eventCameraParam.type, eventCameraParam.cameraPosition);
-
-        native.eventCamera(callbackMethodFullName, eventCameraParam.toString(true));
-    }
-
-```
-
-> eventCameraParam
->
+* 调用相机或相册功能 并将拍摄或获取的照片（或人脸坐标）返回给页面  （6.5.0）
 
 ```
 import EventCameraParam from "@/common/bridge/param/EventCameraParam";
 
-const param = new EventCameraParam(
-            EventCameraParam.types.imageCamera, // 字符串 imageCamera: 相机  imageAlbum： 相册
-            EventCameraParam.cameraPositions.front, // 前置摄像头 0  后置摄像头: 1
-            comConfig.filterId, // 滤镜id
-            comConfig.categoryId, // 分栏id (贴纸是在分栏里面的 所以app一般找贴纸先找到贴纸所在的分栏)
-            comConfig.stickerId, // 贴纸id
-            '', // 貌似是 音乐id
-            'true' // 是否自动下载此贴纸  鸡肋 以后改为默认自动下载 (如咔叽里此贴纸未下载 则无法选中使用)
-    );
+// 从相册选取
+  const param = new EventCameraParam({
+          type:EventCameraParam.types.imageAlbum //字符串 imageCamera: 相机  imageAlbum： 相册
+  })
+  Bridge.eventCamera(param, eventCameraCallback);
 
-const galleryParams = new EventCameraParam(EventCameraParam.types.imageAlbum);
-
-$('#cameraBtn, #galleryBtn').off('click') // 每次添加事件 先解除 否则多次添加事件会调用失败、异常
-$('#cameraBtn').on('click', function(){
-  bridgeFactory.getBridge().eventCamera(param, eventCameraCallback)
-   _hmt.push(['_trackEvent', eventCategory+ inState, 'Btn', '相机拍照'])
-})
-$('#galleryBtn').on('click', function(){
-  bridgeFactory.getBridge().eventCamera(galleryParams, eventCameraCallback)
-   _hmt.push(['_trackEvent', eventCategory+ inState, 'Btn', '相册选取'])
-})
-
+// 用相机拍照
+  const param = new EventCameraParam({
+          type: EventCameraParam.types.imageCamera, // 字符串 imageCamera: 相机  imageAlbum： 相册
+          cameraPosition: EventCameraParam.cameraPositions.front, //前置摄像头 0  后置摄像头: 1
+          filterId: baseConfig.filterId, // 滤镜id
+          categoryId: baseConfig.categoryId, // 分栏id (贴纸是在分栏里面的 所以app一般找贴纸先找到贴纸所在的分栏)
+          stickerId: baseConfig.stickerId // 贴纸id
+  })
+  Bridge.eventCamera(param, eventCameraCallback);
 ```
-> eventCameraWithLandmarks 为更高级的接口 不仅能返回拍摄、选取的照片  
->
-> 如果拍摄、选取的是人物脸部 能够获取此照片的脸部坐标 一起返回给页面
->
-> For example
->
-
+> eventCameraWithLandmarks 在  eventCamera的基础上返回带有landmarks
 ```
+
+// 用相机拍照
+  const param = new EventCameraParam({
+          type: EventCameraParam.types.imageCamera, // 字符串 imageCamera: 相机  imageAlbum： 相册
+          cameraPositions: EventCameraParam.cameraPositions.front, // 前置摄像头 0  后置摄像头: 1
+          filterId: baseConfig.filterId, // 滤镜id
+          categoryId: baseConfig.categoryId, // 分栏id (贴纸是在分栏里面的 所以app一般找贴纸先找到贴纸所在的分栏)
+          stickerId: baseConfig.stickerId
+  })
+  Bridge.eventCameraWithLandmarks(param, eventCameraCallback);
+
 function eventCameraCallback(res, type){
  if (!!res.success == true) {
    const imgSrc = res.base64Image
@@ -235,26 +152,67 @@ function eventCameraCallback(res, type){
 
 ###  getCameraImage
 
->加载最后拍摄的图片 (6.5.3)
+> 拍摄照片后出现confirmbanner， 点击后进入h5并获取之前拍摄的照片 (6.5.3)
 >
 
 ```
 /**
-     * 场景: 用户先在app中使用某贴纸拍照 拍照完出现一个confirmbanner 点击banner 进入H5页面.
-     * 那么进入h5页面后 能够获取到刚拍摄的照片
      * @param userCallback
      */
-    getCameraImage(userCallback) {
-        const callbackMethodFullName = this._registerCallback("getCameraImage", userCallback, CameraResult);
-        this._calliOSFunction("getCameraImage", null, callbackMethodFullName);
-    }
-
-    getCameraImageWithLandmarks(userCallback) {
-        const callbackMethodFullName = this._registerCallback("getCameraImageWithLandmarks", userCallback, CameraResult);
-        this._calliOSFunction("getCameraImageWithLandmarks", null, callbackMethodFullName);
-    }
-
+    getCameraImage
+    getCameraImageWithLandmarks
  ```
+### video upload
+
+```
+// ios中需要先登录才能上传成功
+  let params = new VideoParam()
+  Bridge.selectVideoAndUpload(params, res => {
+    //{success: Boolean, videoPath: String}
+   if (!res.success) return//失败
+  })
+  
+// ios中需要先登录才能上传成功
+  let params = new EventCameraParam({
+    type: EventCameraParam.types.videoCamera,
+    filterId: baseConfig.filterId, // 滤镜id
+    categoryId: baseConfig.categoryId, // 分栏id (贴纸是在分栏里面的 所以app一般找贴纸先找到贴纸所在的分栏)
+    stickerId: baseConfig.stickerId
+  })
+  Bridge.takeVideoAndUpload(params, res => {
+   if (!res.success) return
+  })
+```
+
+### user session
+
+```
+// 获取用户信息
+Bridge.getUserSession(res, () => )
+// 登录
+Bridge.loginWithSession(res, () => )
+// 补充校验手机号
+Bridge.verifyPhoneWithSession(res, () => )
+
+//res: userSeq(Unique key)、userId、userM手机hash值、email、name、success
+```
+
+### close
+
+>  在咔叽webview中的h5页面关闭webView （6.5.3版本以上支持）
+
+
+### titleBarVisible
+
+> 隐藏/显示title区域(是否全屏展示) (7.10.1)
+
+```
+  let state = true
+  $('#titleBarVisible').click(() => {
+    state = !state
+    Bridge.titleBarVisible(state)
+  })
+```
 
 ### uuid
 
@@ -283,15 +241,13 @@ function eventCameraCallback(res, type){
         const callbackMethodFullName = this._registerCallback("login", userCallback, UserInfo);
         this._calliOSFunction("login", null, callbackMethodFullName);
     }
-
 ```
-
 > beta版 测试方法
 >
 > 在web打开以下链接，点击BETA按钮，即可进行测试 http://qa.b612kaji.com/app-static/kaji/login-test/link.html
 >
 
-step1. InAppBrowser 启动时产出cookie  
+step1. InAppBrowser时产出cookie  
 >
 > 出现token cookie 的条件：
 >
@@ -328,40 +284,6 @@ $.ajax({
   }
 });
 
-```
-
-### close
-
->  在咔叽webview中的h5页面关闭webView （6.5.3版本以上支持）
->
-
-```
-// 源码
-
-// android:
-close() {
-  native.close()
-}
-
-// ios
-close() {
-  this._calliOSFunction("close", null, null);
-}
-
- // 调用
-
- $('.exit button').click(() => {
-      BridgeFactory.getBridge().close()
-    })
-```
-
-### titleBarVisible
-
-> 隐藏title区域，全屏展示 (7.10.1)
->
-
-```
-  	b612cnb://native/{"functionName":"titleBarVisible","args":{"isVisible": false}}
 ```
 
 
