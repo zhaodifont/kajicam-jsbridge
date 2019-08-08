@@ -82,12 +82,13 @@ export default class AndroidBridge extends AbstractBridge {
       带有landmarks的eventCamera 7.6.0
     */
     eventCameraWithLandmarks(eventCameraParam, userCallback) {
-        // 在android里部分机型同时使用filterId、categoryId、stickerId会造成app闪退，只可单独使用filterId，8.4.5.3版本之后解决了
-        if (BrowserChecker.isAndroid()) {
+        // 在android里部分机型同时使用filterId、categoryId、stickerId会造成app卡死闪退，只可单独使用filterId，8.4.5.3后修复
+        // if (BrowserChecker.isAndroid()) {
             // eventCameraParam.filterId = undefined;
             // eventCameraParam.categoryId = undefined;
             // eventCameraParam.stickerId = undefined;
-        }
+        // }
+        // (2018.11.21更新) android 版本7.9.3+ 已修复非人脸无回调bug
         if (BrowserChecker.appVersionLessThan([7, 6, 0])){
           console.log('eventCameraWithLandmarks 7.6.0支持')
         }
@@ -137,8 +138,10 @@ export default class AndroidBridge extends AbstractBridge {
     userSeq(Unique key), isMobileVerified(手机认证信息),
     userId(是否登陆),
     userM 手机hash值
-    userSeq(Unique key), isMobileVerified(手机认证信息),
     userId(是否登陆)
+    email
+    name
+    success
     等所有用户信息通过Json传
     */
     getUserSession(userCallback){

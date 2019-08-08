@@ -10,10 +10,21 @@ import EventCameraParam from "@/js/bridge/param/EventCameraParam";
 import SaveShareParam from "@/js/bridge/param/SaveShareParam"
 import VideoParam from '@/js/bridge/param/videoParam'
 // import 'zepto/src/ajax'
-let pathSlice = process.env.NODE_ENV == 'production' ? 'release' : 'beta'
-console.log(`${baseConfig.b612Scheme}inappBrowser?url=https://zhaodifont.github.io/kajicam/dist/${pathSlice}/index.html%3Fuuid%3D%7Bad_did%7D`)
+let pathSlice = process.env.NODE_ENV == 'production' ? 'release' : process.env.NODE_ENV == 'beta' ? 'beta' : ''
+let toLink = ''
+switch (process.env.NODE_ENV) {
+  case 'production':
+    toLink = `${baseConfig.b612Scheme}inappBrowser?url=https://zhaodifont.github.io/kajicam/dist/release/index.html%3Fuuid%3D%7Bad_did%7D`
+    break
+  case 'beta':
+    toLink = `${baseConfig.b612Scheme}inappBrowser?url=https://zhaodifont.github.io/kajicam/dist/beta/index.html%3Fuuid%3D%7Bad_did%7D`
+    break
+  case 'development':
+    toLink = `${baseConfig.b612Scheme}inappBrowser?url=${window.location.href}%3Fuuid%3D%7Bad_did%7D`
+    break
+}
 
-var vConsole = new VConsole();
+var vConsole = new VConsole()
 
 var appState = {
   isAnd: false,
@@ -42,7 +53,7 @@ Bridge.appInfo(res => {
     console.log(window.kajiAppVersion);
     document.querySelector('.baseState').innerText = JSON.stringify(appState)
 
-    $('#getUUid').attr('href', `${baseConfig.b612Scheme}inappBrowser?url=https://zhaodifont.github.io/kajicam/dist/${pathSlice}/index.html%3Fuuid%3D%7Bad_did%7D`)
+    $('#getUUid').attr('href', toLink)
     $('.appControl').show()
     $('.exit').click(() => {
       Bridge.close()
@@ -86,7 +97,6 @@ $('#eventCamera_imageAlbum').on('click', () => {
 
 // 用相机拍照
 $('#eventCamera_imageCamera').on('click', () => {
-  // alert(`filterId:${baseConfig.filterId}-categoryId:${baseConfig.categoryId}-stickerId:${baseConfig.stickerId}`)
   if (appState.isInApp) {
     const param = new EventCameraParam({
             type: EventCameraParam.types.imageCamera, // 字符串 imageCamera: 相机  imageAlbum： 相册
@@ -181,13 +191,12 @@ $('#shareVideo').on('click', () => {
     type: SaveShareParam.types.video
   });
   var iosShared = false;
-      Bridge.shareWithCallback(params, result => {
-        if (!iosShared){
-          iosShared = !iosShared
-          alert('video has been saved, plz choose to share from album')
-        }
-      }, res => {
-      })
+  Bridge.shareWithCallback(params, result => {
+    if (!iosShared){
+      iosShared = !iosShared
+      alert('video has been saved, plz choose to share from album')
+    }
+  }, res => {})
 })
 
 $('#sharePage').on('click', () => {
@@ -256,8 +265,6 @@ $('#verifyPhoneWithSession').on('click', () => {
     $('.userSession').text(JSON.stringify(res))
   })
 })
-
-
 
 function eventCameraCallback(result, type) {
   console.log('>>> eventCameraCallback - result， type', result, type);
