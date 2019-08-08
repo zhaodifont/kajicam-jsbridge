@@ -112,7 +112,6 @@ import SaveShareParam from "@/common/bridge/param/SaveShareParam"
 import EventCameraParam from "@/common/bridge/param/EventCameraParam";
 
 // 从相册选取
-
   const param = new EventCameraParam({
           type:EventCameraParam.types.imageAlbum //字符串 imageCamera: 相机  imageAlbum： 相册
   })
