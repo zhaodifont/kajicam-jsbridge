@@ -114,34 +114,7 @@ $('#shareVideo').on('click', () => {
 
 ### eventCamera & eventCameraWithLandmarks
 
-> 调用相机或相册功能 并将拍摄或获取的照片（或人脸坐标）返回给页面  （6.5.0）
->
-
-```
-/**
-  * @param eventCameraParam : (@see ./param/EventCameraParam)
-  * @param userCallback
-*/
-
- $('#eventCameraWithLandmarks').on('click', () => {
-  if (isInApp) {
-    const param = new EventCameraParam({
-            type: EventCameraParam.types.imageCamera, // 字符串 imageCamera: 相机  imageAlbum： 相册
-            cameraPositions: EventCameraParam.cameraPositions.front, // 前置摄像头 0  后置摄像头: 1
-            filterId: baseConfig.filterId, // 滤镜id
-            categoryId: baseConfig.categoryId, // 分栏id (贴纸是在分栏里面的 所以app一般找贴纸先找到贴纸所在的分栏)
-            stickerId: baseConfig.stickerId
-    })
-    Bridge.eventCameraWithLandmarks(param, eventCameraCallback);
-  } else {
-    $('#inputfile').trigger('click')
-  }
-})
-
-```
-
-> eventCameraParam
->
+* 调用相机或相册功能 并将拍摄或获取的照片（或人脸坐标）返回给页面  （6.5.0）
 
 ```
 import EventCameraParam from "@/common/bridge/param/EventCameraParam";
@@ -176,11 +149,7 @@ $('#eventCamera_imageCamera').on('click', () => {
 })
 
 ```
-> eventCameraWithLandmarks 为更高级的接口 不仅能返回拍摄、选取的照片  
->
-> 如果拍摄、选取的是人物脸部 能够获取此照片的脸部坐标 一起返回给页面
->
-
+> eventCameraWithLandmarks 在  eventCamera的基础上返回带有landmarks
 ```
 
 // 用相机拍照
