@@ -55,9 +55,7 @@ Bridge.[调用指定功能]
 >
 > ios不同的环境在_calliOSFunction方法中设置不同的scheme
 
-### appInfo
-
-* 查询app信息 6.5.3
+### appInfo `查询app信息 6.5.3`
 
 ```
 Bridge.appInfo(res => {
