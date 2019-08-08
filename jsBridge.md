@@ -4,8 +4,6 @@
 
 ### jsBridge
 
-* 区分ios、android
-
 ```
 // @/js/bridge/BridgeFactory.js
 
