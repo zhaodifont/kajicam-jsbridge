@@ -4,12 +4,11 @@
 
 ### jsBridge
 
-* 区分ios、android
 ```
 // @/js/bridge/BridgeFactory.js
 
-import AndroidBridge from "./AndroidBridge";
-import IosBridge from "./IosBridge";
+import AndroidBridge from "./AndroidBridge"
+import IosBridge from "./IosBridge"
 
 export default class BridgeFactory {
     static getBridge() {
@@ -28,7 +27,9 @@ const Bridge = BridgeFactory.getBridge()
 export default Bridge
 
 ```
+
 * 引入jsbridge
+
 ```
 // main.js
 import Bridge from '@/js/bridge/BridgeFactory'
@@ -36,10 +37,6 @@ import Bridge from '@/js/bridge/BridgeFactory'
 let isInApp = false //初始默认app外
 Bridge.[调用指定功能]
 
-```
-
-
-```
 // IosBridge.js 呼起App功能
 
  _calliOSFunction(functionName, args, sCallback) {
@@ -58,6 +55,7 @@ Bridge.[调用指定功能]
 ### appInfo 
 
 * 查询app信息 6.5.3
+
 ```
 Bridge.appInfo(res => {
       // res : {app, os, deviceModel, language, country, duid(7.10.1)}
@@ -74,6 +72,7 @@ Bridge.appInfo(res => {
 ### save
 
 * 保存图片 6.7.0
+
 ```
 import SaveShareParam from "@/common/bridge/param/SaveShareParam"
 
@@ -152,8 +151,7 @@ function eventCameraCallback(res, type){
 
 ###  getCameraImage
 
-> 拍摄照片后出现confirmbanner， 点击后进入h5并获取之前拍摄的照片 (6.5.3)
->
+* 拍摄照片后出现confirmbanner， 点击后进入h5并获取之前拍摄的照片 (6.5.3)
 
 ```
 /**
