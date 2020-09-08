@@ -25,7 +25,7 @@ switch (process.env.NODE_ENV) {
 
 let VConsole = require('vconsole');new VConsole();
 let dBtn = document.createElement('button')
-dBtn.innerText = '11904';dBtn.setAttribute('class','debugBtn');document.body.appendChild(dBtn);
+dBtn.innerText = '11323';dBtn.setAttribute('class','debugBtn');document.body.appendChild(dBtn);
 dBtn.onclick = () => {window.location.reload()}
 
 export const eventBaseName = 'projectName'
@@ -133,8 +133,7 @@ checkAppInfo(() => {
       const param = new EventCameraParam({
               type: EventCameraParam.types.imageCamera, // 字符串 imageCamera: 相机  imageAlbum： 相册
               cameraPosition: EventCameraParam.cameraPositions.front, //前置摄像头 0  后置摄像头: 1
-              // filterId: baseConfig.filterId, // 滤镜id
-              stickerId: baseConfig.stickerId, //轻妆模式下的轻妆贴纸
+              stickerId: 326761, //轻妆模式下的轻妆贴纸
               takemode:7//轻妆模式
       })
       alert(param)
