@@ -1,7 +1,7 @@
-import BrowserChecker from "../util/BrowserChecker";
-import NullBridge from "./NullBridge";
-import AndroidBridge from "./AndroidBridge";
-import IosBridge from "./IosBridge";
+import BrowserChecker from "../util/BrowserChecker"
+import NullBridge from "./NullBridge"
+import AndroidBridge from "./AndroidBridge"
+import IosBridge from "./IosBridge"
 
 class BridgeFactory {
     static getBridge() {

@@ -10,7 +10,3 @@ export default class B612 {
         b612.logger = Logger;
     }
 }
-
-
-
-

@@ -61,7 +61,11 @@ export default class AbstractBridge {
       // B612.native.IosBridge.callback.appInfo =
       this.callback[callbackName] = (result) => {
           this._logResult(result, callbackName)
+          console.log('result:', result);
+          console.log('callbackName:', callbackName);
+          console.log('resultType:', resultType);
           let resultParsed = resultType ? resultType.from(result) : result//{app, os, deviceModel, language, country}
+
           userCallback.apply(undefined, [resultParsed, ...additionalParams]);
       }
       /*

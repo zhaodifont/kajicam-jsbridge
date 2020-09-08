@@ -19,7 +19,7 @@ export default class EventCameraParam extends BridgeParam {
     filterId：滤镜id、categoryId：分栏id、stickerId：贴纸id，collageId：比例id(一般不用)
     autoDownload：选择的贴纸是否自动下载(一般固定为true)
   */
-    constructor({type = '', cameraPosition = '0', filterId = '', categoryId = '', stickerId = '', collageId = ''} = {}) {
+    constructor({type = '', cameraPosition = '0', filterId = undefined, categoryId = undefined, stickerId = undefined, takemode = undefined, collageId = undefined} = {}) {
         super()
         if (!types[type]) throw `[illegal type] ${type}`
         this.type = type
@@ -29,6 +29,7 @@ export default class EventCameraParam extends BridgeParam {
         this.stickerId = stickerId
         this.collageId = collageId
         this.autoDownload = 'true'
+        this.takemode = takemode
     }
 
     static get types() {

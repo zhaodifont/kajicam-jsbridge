@@ -1,5 +1,4 @@
-import 'babel-polyfill'
-
+// import 'babel-polyfill'
 import Bridge from '@/js/bridge/BridgeFactory'
 import BrowserChecker from "@/js/util/BrowserChecker"
 import 'zepto/src/zepto'
@@ -10,7 +9,7 @@ import EventCameraParam from "@/js/bridge/param/EventCameraParam";
 import SaveShareParam from "@/js/bridge/param/SaveShareParam"
 import VideoParam from '@/js/bridge/param/videoParam'
 // import 'zepto/src/ajax'
-let pathSlice = process.env.NODE_ENV == 'production' ? 'release' : process.env.NODE_ENV == 'beta' ? 'beta' : ''
+// let pathSlice = process.env.NODE_ENV == 'production' ? 'release' : process.env.NODE_ENV == 'beta' ? 'beta' : ''
 let toLink = ''
 switch (process.env.NODE_ENV) {
   case 'production':
@@ -24,40 +23,96 @@ switch (process.env.NODE_ENV) {
     break
 }
 
-var vConsole = new VConsole()
+let VConsole = require('vconsole');new VConsole();
+let dBtn = document.createElement('button')
+dBtn.innerText = '11904';dBtn.setAttribute('class','debugBtn');document.body.appendChild(dBtn);
+dBtn.onclick = () => {window.location.reload()}
 
-var appState = {
-  isAnd: false,
-  isIos: false,
-  isInApp: false
+export const eventBaseName = 'projectName'
+// 初始化基本状态
+let myApp = {
+ inState: 'outApp',
+ isInApp: false,
+ version: '-',
+ dpr: window.devicePixelRatio,
+ duid: '-'
 }
-
-if (BrowserChecker.isIos()) {
-  appState.isIos = true
-} else if (BrowserChecker.isAndroid()) {
-  appState.isAnd = true
+function checkAppInfo(cb) {
+  let preObj = {}
+  if (BrowserChecker.isIos()) {
+    preObj.isIos = true
+  } else if (BrowserChecker.isAndroid()) {
+    preObj.isAnd = true
+  }
+  var outTestTimer = null
+  // inApp
+  Bridge.appInfo(res => {
+    clearTimeout(outTestTimer)
+    if (res.app) {
+      window.kajiAppVersion = res.app.split('.')
+      preObj.isInApp = true
+      preObj.inState = 'inApp'
+      preObj.version = res.app
+      preObj.EventFullPath = `${eventBaseName}-${preObj.inState}`
+      myApp = Object.assign({}, myApp, res, preObj)
+      return cb()
+    }
+    // 是否隐藏webview导航栏 //ios无法返回到相机，需加关闭页面按钮
+    // Bridge.titleBarVisible()
+  })
+  // outApp
+  preObj.EventFullPath = `${eventBaseName}-${myApp.inState}`
+  outTestTimer = setTimeout(() => {
+    myApp = Object.assign({}, myApp, preObj)
+    cb()
+  }, 1200)
 }
-
-document.querySelector('.baseState').innerText = JSON.stringify(appState)
+// var appState = {
+//   isAnd: false,
+//   isIos: false,
+//   isInApp: false
+// }
+// if (BrowserChecker.isIos()) {
+//   appState.isIos = true
+// } else if (BrowserChecker.isAndroid()) {
+//   appState.isAnd = true
+// }
+// document.querySelector('.baseState').innerText = JSON.stringify(appState)
 
 // console.log(window.B612KajiBridgeInterface != undefined)
-Bridge.appInfo(res => {
-  // app内 才能执行到这一步
-  /*
-    {app: '7.n.n', 'os': '23', deviceModel: 'CAM-TLOO', 'language': 'zh-CN', 'country':'CN'}
-  */
-  document.querySelector('.AppInfo').innerText = JSON.stringify(res)
-  if (res.app) {
-    appState.isInApp = true
-    window.kajiAppVersion = res.app.split('.')
-    console.log(window.kajiAppVersion);
-    document.querySelector('.baseState').innerText = JSON.stringify(appState)
+// Bridge.appInfo(res => {
+//   if (res.app) {
+//     appState.isInApp = true
+//     window.kajiAppVersion = res.app.split('.')
+//     console.log(window.kajiAppVersion);
+//     document.querySelector('.baseState').innerText = JSON.stringify(appState)
+//
+//     $('#getUUid').attr('href', toLink)
+//     $('.appControl').show()
+//     $('.exit').click(() => {
+//       Bridge.close()
+//     })
+//     let state = true
+//     $('#titleBarVisible').click(() => {
+//       state = !state
+//       Bridge.titleBarVisible(state)
+//     })
+//
+//     let obj = getParamsToObj()
+//     $('.getUUidVal')[0].innerText = obj.uuid ? obj.uuid : ''
+//   }
+// })
+
+checkAppInfo(() => {
+  document.querySelector('.AppInfo').innerText = JSON.stringify(myApp)
+  if (myApp.isInApp) {
 
     $('#getUUid').attr('href', toLink)
     $('.appControl').show()
     $('.exit').click(() => {
       Bridge.close()
     })
+
     let state = true
     $('#titleBarVisible').click(() => {
       state = !state
@@ -66,6 +121,25 @@ Bridge.appInfo(res => {
 
     let obj = getParamsToObj()
     $('.getUUidVal')[0].innerText = obj.uuid ? obj.uuid : ''
+    //去贴纸 轻妆
+    $('#goStickera').click(() => {
+      window.location.href = `${baseConfig.b612Scheme}go?stickerId=${baseConfig.stickerId}&autoDownload=true`
+    })
+    $('#goStickerb').click(() => {
+      alert(`${baseConfig.b612Scheme}go?takemode=7&stickerId=326761`)
+      window.location.href = `${baseConfig.b612Scheme}go?takemode=7&stickerId=326761`
+    })
+    $('#goStickerc').click(() => {
+      const param = new EventCameraParam({
+              type: EventCameraParam.types.imageCamera, // 字符串 imageCamera: 相机  imageAlbum： 相册
+              cameraPosition: EventCameraParam.cameraPositions.front, //前置摄像头 0  后置摄像头: 1
+              // filterId: baseConfig.filterId, // 滤镜id
+              stickerId: baseConfig.stickerId, //轻妆模式下的轻妆贴纸
+              takemode:7//轻妆模式
+      })
+      alert(param)
+      Bridge.eventCamera(param, eventCameraCallback);
+    })
   }
 })
 
@@ -84,7 +158,7 @@ getParamsToObj()
 
 // 从相册选取
 $('#eventCamera_imageAlbum').on('click', () => {
-  if (appState.isInApp) {
+  if (myApp.isInApp) {
 
     const param = new EventCameraParam({
             type:EventCameraParam.types.imageAlbum //字符串 imageCamera: 相机  imageAlbum： 相册
@@ -97,7 +171,7 @@ $('#eventCamera_imageAlbum').on('click', () => {
 
 // 用相机拍照
 $('#eventCamera_imageCamera').on('click', () => {
-  if (appState.isInApp) {
+  if (myApp.isInApp) {
     const param = new EventCameraParam({
             type: EventCameraParam.types.imageCamera, // 字符串 imageCamera: 相机  imageAlbum： 相册
             cameraPosition: EventCameraParam.cameraPositions.front, //前置摄像头 0  后置摄像头: 1
@@ -113,7 +187,7 @@ $('#eventCamera_imageCamera').on('click', () => {
 
 // 用相机拍照
 $('#eventCameraWithLandmarks').on('click', () => {
-  if (appState.isInApp) {
+  if (myApp.isInApp) {
     const param = new EventCameraParam({
             type: EventCameraParam.types.imageCamera, // 字符串 imageCamera: 相机  imageAlbum： 相册
             cameraPositions: EventCameraParam.cameraPositions.front, // 前置摄像头 0  后置摄像头: 1
@@ -128,7 +202,7 @@ $('#eventCameraWithLandmarks').on('click', () => {
 })
 
 $('#eventCameraWithLandmarks_imageAlbum').on('click', () => {
-  if (appState.isInApp) {
+  if (myApp.isInApp) {
     const param = new EventCameraParam({
             type: EventCameraParam.types.imageAlbum // 字符串 imageCamera: 相机  imageAlbum： 相册
     })
@@ -141,9 +215,10 @@ $('#eventCameraWithLandmarks_imageAlbum').on('click', () => {
 // ios中需要先登录才能上传成功
 $('#selectVideoAndUpload').on('click', () => {
   let params = new VideoParam()
+  console.log('selectVideoAndUpload params', params);
   Bridge.selectVideoAndUpload(params, res => {
     //{success: Boolean, videoPath: String}
-   console.log(res)
+   console.log('selectVideoAndUpload res:', res)
    if (!res.success) return
    $('#distVideo').attr({'src': res.videoPath, 'controls': 'true', 'autoplay': 'true'})
    $('#distVideo')[0].play()

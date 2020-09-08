@@ -107,79 +107,162 @@ B612Kaji.Native.ios.Function = function () {
 
 B612Kaji.Native.ios.Function.prototype = {
 
-	openCustomURLinIFrame: function (src) {
+	openCustomURLinIFrame: function(src) {
+
 		var rootElm = document.documentElement;
-		var newFrameElm = document.createElement("IFRAME");
+	    var newFrameElm = document.createElement("IFRAME");
 
-		newFrameElm.setAttribute("src", src);
-		rootElm.appendChild(newFrameElm);
-		newFrameElm.parentNode.removeChild(newFrameElm);
+		//console.log(src);
+
+	    newFrameElm.setAttribute("src",src);
+	    rootElm.appendChild(newFrameElm);
+	    newFrameElm.parentNode.removeChild(newFrameElm);
 	},
 
-	calliOSFunction: function (functionName, args, sCallback) {
-		var url = CONFIG.b612Scheme + "native/";
-		var callInfo = {};
-			callInfo.functionName = functionName;
-		if (sCallback) {
-			callInfo.success = sCallback;
-		}
-		if (args) {
-			callInfo.args = args;
-		}
-		url += JSON.stringify(callInfo);
+	calliOSFunction: function(functionName, args, successCallback) {
 
-		this.openCustomURLinIFrame(url);
+		var url = CONFIG.b612Scheme + "://native/";
+	  var callInfo = {};
+		callInfo.functionName=functionName;
+	    if (successCallback) {
+	        callInfo.success = successCallback;
+	    }
+	    if (args) {
+	        callInfo.args = args;
+	    }
+		 url += JSON.stringify(callInfo);
+
+	    this.openCustomURLinIFrame(url);
 	},
 
-	saveImage: function (cb,imageUrl) {
-		this.callback.saveImage = function (result) {
+	save: function(successCallback, options) {
+		this.callback.save = function(result) {
 			var json = JSON.parse(result);
-			cb(json)
+			alert("success : " + json.success + " errorMessage : " + json.errorMessage);
 		};
-		var options = {"imageUrl" : imageUrl};
+		this.calliOSFunction("save", options, "B612Kaji.Native.ios.Function.getInstance().callback.save");
+	},
+
+	shareWithCallback: function(successCallback, options) {
+		this.callback.shareWithCallback2 = function(result) {
+			var json = JSON.parse(result);
+			alert("success : " + json.success + " errorMessage : " + json.errorMessage);
+		};
+		this.callback.clickShareButton2 = function(result) {
+			var json = JSON.parse(result);
+			alert("success : " + json.success + " errorMessage : " + json.errorMessage);
+			successCallback(json);
+		};
+		options.clickShareButton = "B612Kaji.Native.ios.Function.getInstance().callback.clickShareButton2";
+		this.calliOSFunction("share", options, "B612Kaji.Native.ios.Function.getInstance().callback.shareWithCallback2");
+	},
+
+	saveImage: function(successCallback, options) {
+		this.callback.saveImage = function(result) {
+			var json = JSON.parse(result);
+			alert("success : " + json.success + " errorMessage : " + json.errorMessage);
+		};
 		this.calliOSFunction("saveImage", options, "B612Kaji.Native.ios.Function.getInstance().callback.saveImage");
 	},
 
+	shareImage: function(successCallback, options) {
+		this.callback.shareImage = function(result) {
+			var json = JSON.parse(result);
+			alert("success : " + json.success + " errorMessage : " + json.errorMessage);
+		};
+		this.calliOSFunction("shareImage", options, "B612Kaji.Native.ios.Function.getInstance().callback.shareImage");
+	},
+	shareImageWithCallback: function(successCallback, options) {
+		this.callback.shareImageWithCallback = function(result) {
+			var json = JSON.parse(result);
+			alert("success : " + json.success + " errorMessage : " + json.errorMessage);
+		};
+		this.callback.clickShareButton = function(result) {
+			var json = JSON.parse(result);
+			alert("success : " + json.success + " errorMessage : " + json.errorMessage);
+			successCallback(json);
+		};
+		options.clickShareButton = "B612Kaji.Native.ios.Function.getInstance().callback.clickShareButton";
+		this.calliOSFunction("shareImage", options, "B612Kaji.Native.ios.Function.getInstance().callback.shareImageWithCallback");
+	},
 
-	eventCamera: function(sCallback, type, cameraPosition, filterId) {
+	eventCamera: function(successCallback, options) {
 		this.callback.eventCamera = function(result) {
 			var json = JSON.parse(result);
-			sCallback(json, type);
+			alert("success : " + json.success + " errorMessage : " + json.errorMessage + "base64Image : " + json.base64Image.length);
+			successCallback(json);
 		};
-		var options = {"type" : type};
-		if (cameraPosition != undefined) {
-			options.cameraPosition = cameraPosition;
-		}
-		if (filterId != undefined) {
-			options.filterId = filterId;
-		}
 		this.calliOSFunction("eventCamera", options, "B612Kaji.Native.ios.Function.getInstance().callback.eventCamera");
 	},
 
-	getCameraImage: function(sCallback) {
+	getCameraImage: function(successCallback) {
 		this.callback.getCameraImage = function(result) {
 			var json = JSON.parse(result);
-			// alert(!!json)
-			// alert("success : " + json.success + " errorMessage : " + json.errorMessage + "base64Image : " + json.base64Image.length);
-			sCallback(json);
+			alert("success : " + json.success + " errorMessage : " + json.errorMessage + "base64Image : " + json.base64Image.length);
+			successCallback(json);
 		};
 		this.calliOSFunction("getCameraImage", null, "B612Kaji.Native.ios.Function.getInstance().callback.getCameraImage");
 	},
 
-	appInfo: function(sCallback) {
+	appInfo: function(successCallback) {
 		this.callback.appInfo = function(result) {
-			sCallback(result);
+			successCallback(result);
 		};
 		this.calliOSFunction("appInfo", null, "B612Kaji.Native.ios.Function.getInstance().callback.appInfo");
-	}
+	},
+
+	close: function() {
+		this.calliOSFunction("close",null,null);
+	},
+
+	titleBarVisible: function(options) {
+		this.calliOSFunction("titleBarVisible", options, null);
+	},
+
+	getUserSession: function(successCallback) {
+		this.callback.getUserSession = function(result) {
+			successCallback(result);
+		};
+		this.calliOSFunction("getUserSession", null, "B612Kaji.Native.ios.Function.getInstance().callback.getUserSession");
+	},
+
+	loginWithSession: function(successCallback) {
+		this.callback.loginWithSession = function(result) {
+			successCallback(result);
+		};
+		this.calliOSFunction("loginWithSession", null, "B612Kaji.Native.ios.Function.getInstance().callback.loginWithSession");
+	},
+
+	verifyPhoneWithSession: function(successCallback) {
+		this.callback.verifyPhoneWithSession = function(result) {
+			successCallback(result);
+		};
+		this.calliOSFunction("verifyPhoneWithSession", null, "B612Kaji.Native.ios.Function.getInstance().callback.verifyPhoneWithSession");
+	},
+
+	selectVideoAndUpload: function(successCallback, options) {
+		this.callback.selectVideoAndUpload = function(result) {
+			successCallback(result);
+		};
+		this.calliOSFunction("selectVideoAndUpload", options, "B612Kaji.Native.ios.Function.getInstance().callback.selectVideoAndUpload");
+	},
+
+	takeVideoAndUpload: function(successCallback, options) {
+		this.callback.takeVideoAndUpload = function(result) {
+			successCallback(result);
+		};
+		this.calliOSFunction("takeVideoAndUpload", options, "B612Kaji.Native.ios.Function.getInstance().callback.takeVideoAndUpload");
+	},
 }
 
-B612Kaji.Native.ios.Function.getInstance = function () {
-  if (B612Kaji.Native.ios.Function.instance == null) {
-    B612Kaji.Native.ios.Function.instance = new B612Kaji.Native.ios.Function();
-  }
-  return B612Kaji.Native.ios.Function.instance;
+
+B612Kaji.Native.ios.Function.getInstance = function() {
+	if (B612Kaji.Native.ios.Function.instance == null) {
+        B612Kaji.Native.ios.Function.instance = new B612Kaji.Native.ios.Function();
+	}
+	return B612Kaji.Native.ios.Function.instance;
 }
+
 B612Kaji.Native.ios.Function.instance = null;
 
 B612Kaji.Native.NullBridge = {
