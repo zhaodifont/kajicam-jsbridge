@@ -25,7 +25,7 @@ switch (process.env.NODE_ENV) {
 
 let VConsole = require('vconsole');new VConsole();
 let dBtn = document.createElement('button')
-dBtn.innerText = '11324';dBtn.setAttribute('class','debugBtn');document.body.appendChild(dBtn);
+dBtn.innerText = '1449';dBtn.setAttribute('class','debugBtn');document.body.appendChild(dBtn);
 dBtn.onclick = () => {window.location.reload()}
 
 export const eventBaseName = 'projectName'
