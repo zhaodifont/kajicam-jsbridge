@@ -25,10 +25,64 @@ switch (process.env.NODE_ENV) {
 
 let VConsole = require('vconsole');new VConsole();
 let dBtn = document.createElement('button')
-dBtn.innerText = '11323';dBtn.setAttribute('class','debugBtn');document.body.appendChild(dBtn);
+dBtn.innerText = '11324';dBtn.setAttribute('class','debugBtn');document.body.appendChild(dBtn);
 dBtn.onclick = () => {window.location.reload()}
 
 export const eventBaseName = 'projectName'
+// 如果需要手机号，注册的时候没有使用，则单独补充校验手机号
+// Bridge.verifyPhoneWithSession(res => {
+//   console.log('verifyPhoneWithSession', res);
+// })
+/*
+  活动用户登录信息
+  @return res {
+  email: ''(ios) undefined (and),
+  name:...,
+  userId:...,
+  userM:'' '',
+  userSeq:'' '',
+  success:true(ios) undefined(and),
+}
+*/
+$('#getUserSession').on('click', () => {
+  $('.userSession').text('')
+  Bridge.getUserSession(res => {
+    for (let i in res){
+      if (res[i] == undefined) {
+        res[i] = ''
+      }
+    }
+    console.log(res)
+    $('.userSession').text(JSON.stringify(res))
+  })
+})
+
+$('#loginWithSession').on('click', () => {
+  $('.userSession').text('')
+  Bridge.loginWithSession(res => {
+    for (let i in res){
+      if (res[i] == undefined) {
+        res[i] = ''
+      }
+    }
+    console.log(res)
+    $('.userSession').text(JSON.stringify(res))
+  })
+})
+
+$('#verifyPhoneWithSession').on('click', () => {
+  $('.userSession').text('')
+  Bridge.verifyPhoneWithSession(res => {
+    for (let i in res){
+      if (res[i] == undefined) {
+        res[i] = ''
+      }
+    }
+    console.log(res)
+    $('.userSession').text(JSON.stringify(res))
+  })
+})
+
 // 初始化基本状态
 let myApp = {
  inState: 'outApp',
@@ -67,41 +121,7 @@ function checkAppInfo(cb) {
     cb()
   }, 1200)
 }
-// var appState = {
-//   isAnd: false,
-//   isIos: false,
-//   isInApp: false
-// }
-// if (BrowserChecker.isIos()) {
-//   appState.isIos = true
-// } else if (BrowserChecker.isAndroid()) {
-//   appState.isAnd = true
-// }
-// document.querySelector('.baseState').innerText = JSON.stringify(appState)
 
-// console.log(window.B612KajiBridgeInterface != undefined)
-// Bridge.appInfo(res => {
-//   if (res.app) {
-//     appState.isInApp = true
-//     window.kajiAppVersion = res.app.split('.')
-//     console.log(window.kajiAppVersion);
-//     document.querySelector('.baseState').innerText = JSON.stringify(appState)
-//
-//     $('#getUUid').attr('href', toLink)
-//     $('.appControl').show()
-//     $('.exit').click(() => {
-//       Bridge.close()
-//     })
-//     let state = true
-//     $('#titleBarVisible').click(() => {
-//       state = !state
-//       Bridge.titleBarVisible(state)
-//     })
-//
-//     let obj = getParamsToObj()
-//     $('.getUUidVal')[0].innerText = obj.uuid ? obj.uuid : ''
-//   }
-// })
 
 checkAppInfo(() => {
   document.querySelector('.AppInfo').innerText = JSON.stringify(myApp)
@@ -298,47 +318,6 @@ $('#shareImage').on('click', () => {
   })
 })
 
-/*
-  about user session
-*/
-$('#getUserSession').on('click', () => {
-  $('.userSession').text('')
-  Bridge.getUserSession(res => {
-    for (let i in res){
-      if (res[i] == undefined) {
-        res[i] = ''
-      }
-    }
-    console.log(res)
-    $('.userSession').text(JSON.stringify(res))
-  })
-})
-
-$('#loginWithSession').on('click', () => {
-  $('.userSession').text('')
-  Bridge.loginWithSession(res => {
-    for (let i in res){
-      if (res[i] == undefined) {
-        res[i] = ''
-      }
-    }
-    console.log(res)
-    $('.userSession').text(JSON.stringify(res))
-  })
-})
-
-$('#verifyPhoneWithSession').on('click', () => {
-  $('.userSession').text('')
-  Bridge.verifyPhoneWithSession(res => {
-    for (let i in res){
-      if (res[i] == undefined) {
-        res[i] = ''
-      }
-    }
-    console.log(res)
-    $('.userSession').text(JSON.stringify(res))
-  })
-})
 
 function eventCameraCallback(result, type) {
   console.log('>>> eventCameraCallback - result， type', result, type);
